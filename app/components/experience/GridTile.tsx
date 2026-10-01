@@ -49,7 +49,7 @@ const GridTile = (props: GridTileProps) => {
         duration: 0.5,
       });
     }
-  }, []);
+  }, [id, isMobile]);
 
   useFrame((state) => {
     const d = data.range(0.95, 0.05);

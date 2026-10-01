@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useIsMobile } from "@/app/hooks/useIsMobile";
 import ServiceTile from "./ServiceTile";
 
@@ -16,10 +16,10 @@ const OfferingsCarousel = () => {
     if (!isActive) setActiveId(null);
   }, [isActive]);
 
-  const onClick = (id: number) => {
+  const onClick = useCallback((id: number) => {
     if (!isMobile) return;
-    setActiveId(id === activeId ? null : id);
-  };
+    setActiveId((prev) => (prev === id ? null : id));
+  }, [isMobile]);
 
   const tiles = useMemo(() => {
     const fov = Math.PI;
@@ -44,7 +44,7 @@ const OfferingsCarousel = () => {
         />
       );
     });
-  }, [activeId, isActive]);
+  }, [activeId, onClick]);
 
   return (
     <group rotation={[0, -Math.PI / 12, 0]}>

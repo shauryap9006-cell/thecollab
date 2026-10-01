@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { Suspense, useRef } from "react";
 
 import { useThemeStore } from "@stores";
+import { FOOTER_LINKS, SITE, whatsappLink } from "@constants";
 
 import SideBadge from "./AwwardsBadge";
 import PortalCloseButton from "./PortalCloseButton";
@@ -76,6 +77,26 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
       <ThemeSwitcher />
       <ScrollHint />
       <IndustryModal />
+
+      {/* Accessible & SEO-crawlable semantic links */}
+      <footer className="sr-only" aria-label="Social and contact links">
+        <h2>{SITE.name} — Contact and Social Links</h2>
+        <p>{SITE.tagline}</p>
+        <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">
+          Start a project on WhatsApp
+        </a>
+        <nav aria-label="Footer links">
+          <ul>
+            {FOOTER_LINKS.map((link) => (
+              <li key={link.name}>
+                <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  {link.name} ({link.hoverText ?? link.name})
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </footer>
     </div>
   );
 };

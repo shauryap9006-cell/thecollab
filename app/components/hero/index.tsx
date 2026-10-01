@@ -35,8 +35,9 @@ const Hero = () => {
   }, [progress]);
 
   useEffect(() => {
-    if (ctaRef.current) {
-      gsap.to(ctaRef.current.scale, {
+    const cta = ctaRef.current;
+    if (cta) {
+      gsap.to(cta.scale, {
         x: ctaHovered ? 1.1 : 1,
         y: ctaHovered ? 1.1 : 1,
         z: ctaHovered ? 1.1 : 1,
@@ -44,7 +45,7 @@ const Hero = () => {
       });
     }
     return () => {
-      if (ctaRef.current) gsap.killTweensOf(ctaRef.current.scale);
+      if (cta) gsap.killTweensOf(cta.scale);
     };
   }, [ctaHovered]);
 

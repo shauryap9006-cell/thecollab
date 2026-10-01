@@ -26,15 +26,16 @@ const FooterLinkItem = ({ link, isMobile }: { link: FooterLink; isMobile: boolea
   };
 
   useEffect(() => {
-    if (textRef.current) {
-      gsap.to(textRef.current, {
+    const textMesh = textRef.current;
+    if (textMesh) {
+      gsap.to(textMesh, {
         letterSpacing: hovered ? 0.3 : 0,
         duration: 0.3,
       });
     }
 
     return () => {
-      if (textRef.current) gsap.killTweensOf(textRef.current);
+      if (textMesh) gsap.killTweensOf(textMesh);
     };
   }, [hovered]);
 

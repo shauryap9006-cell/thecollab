@@ -20,22 +20,23 @@ export const ScrollHint = () => {
     : true;
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const el = containerRef.current;
+    if (!el) return;
     if (showScrollHint) {
-      gsap.to(containerRef.current, {
+      gsap.to(el, {
         opacity: 1,
         duration: 1.5,
         delay: 1.5,
       });
     } else {
-      gsap.killTweensOf(containerRef.current);
-      gsap.to(containerRef.current, {
+      gsap.killTweensOf(el);
+      gsap.to(el, {
         opacity: 0,
         duration: 0.5,
       });
     }
     return () => {
-      if (containerRef.current) gsap.killTweensOf(containerRef.current);
+      if (el) gsap.killTweensOf(el);
     };
   }, [showScrollHint]);
 

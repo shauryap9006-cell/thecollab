@@ -91,16 +91,17 @@ const Timeline = ({ progress }: { progress: number }) => {
   const journeyRef = useRef<THREE.Group>(null);
 
   useEffect(() => {
+    const group = groupRef.current;
     const tl = gsap.timeline();
-    if (groupRef.current) {
-      tl.to(groupRef.current.scale, {
+    if (group) {
+      tl.to(group.scale, {
         x: isActive ? 1 : 0,
         y: isActive ? 1 : 0,
         z: isActive ? 1 : 0,
         duration: 1,
         delay: isActive ? 0.4 : 0,
       });
-      tl.to(groupRef.current.position, {
+      tl.to(group.position, {
         y: isActive ? 0 : -2,
         duration: 1,
         delay: isActive ? 0.4 : 0,
@@ -141,7 +142,7 @@ const Timeline = ({ progress }: { progress: number }) => {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      if (groupRef.current) gsap.killTweensOf(groupRef.current);
+      if (group) gsap.killTweensOf(group);
     };
   }, [isActive, curvePoints]);
 
@@ -149,15 +150,16 @@ const Timeline = ({ progress }: { progress: number }) => {
   const journeyOpacity = Math.max(0, Math.min(1, (progress - 0.85) * 8));
 
   useEffect(() => {
-    if (journeyRef.current) {
-      gsap.to(journeyRef.current.position, {
+    const journey = journeyRef.current;
+    if (journey) {
+      gsap.to(journey.position, {
         y: -2.6,
         duration: 0.5,
       });
     }
 
     return () => {
-      if (journeyRef.current) gsap.killTweensOf(journeyRef.current.position);
+      if (journey) gsap.killTweensOf(journey.position);
     };
   }, []);
 

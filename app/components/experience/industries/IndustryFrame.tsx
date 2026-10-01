@@ -59,9 +59,11 @@ const IndustryFrame = ({
   const isHighlighted = hovered || forceHover;
 
   useEffect(() => {
-    if (!frameRef.current) return;
+    const frame = frameRef.current;
+    const textGroup = textGroupRef.current;
+    if (!frame) return;
 
-    gsap.to(frameRef.current.scale, {
+    gsap.to(frame.scale, {
       x: isHighlighted ? 1.15 : 1,
       y: isHighlighted ? 1.15 : 1,
       z: isHighlighted ? 1.15 : 1,
@@ -69,16 +71,16 @@ const IndustryFrame = ({
       ease: "power2.out"
     });
 
-    if (textGroupRef.current) {
-      gsap.to(textGroupRef.current.position, {
+    if (textGroup) {
+      gsap.to(textGroup.position, {
         y: isHighlighted ? -1.8 : -1.5,
         duration: 0.4,
       });
     }
 
     return () => {
-      if (frameRef.current) gsap.killTweensOf(frameRef.current.scale);
-      if (textGroupRef.current) gsap.killTweensOf(textGroupRef.current.position);
+      if (frame) gsap.killTweensOf(frame.scale);
+      if (textGroup) gsap.killTweensOf(textGroup.position);
     };
   }, [isHighlighted]);
 
@@ -88,12 +90,19 @@ const IndustryFrame = ({
     transmission: 1.0,
     ior: 1.45,
     dispersion: 8,
+    clearcoat: 1.0,
+    color: '#ffffff',
     transparent: true,
     opacity: 0.3,
-    clearcoat: 1,
     clearcoatRoughness: 0,
     reflectivity: 0.5,
   }), []);
+
+  useEffect(() => {
+    return () => {
+      glassMaterial.dispose();
+    };
+  }, [glassMaterial]);
 
   return (
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4} position={position as THREE.Vector3}>
