@@ -3,7 +3,6 @@
 import { ScrollControls, useScroll } from '@react-three/drei';
 import { usePortalStore, useScrollStore } from '@stores';
 import { useEffect } from 'react';
-import * as THREE from 'three';
 import { Memory } from '../../models/Memory';
 import Timeline from './Timeline';
 
@@ -46,7 +45,7 @@ const ServicesContent = ({ isActive }: { isActive: boolean }) => {
 
   return (
     <>
-      <Memory scale={new THREE.Vector3(5, 5, 5)} position={new THREE.Vector3(0, -6, 1)} />
+      <Memory scale={[5, 5, 5]} position={[0, -6, 1]} />
       <Timeline progress={isActive ? scrollProgress : 0} />
     </>
   );

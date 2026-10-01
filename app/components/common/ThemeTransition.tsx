@@ -14,6 +14,7 @@ const ThemeTransition = () => {
   const { theme } = useThemeStore();
   const { camera } = useThree();
   const cloudsRef = useRef<THREE.Group>(null);
+  const innerGroupRef = useRef<THREE.Group>(null);
   const prevThemeRef = useRef(theme.type);
 
   // Keep the clouds group relative to the camera at all times
@@ -29,9 +30,9 @@ const ThemeTransition = () => {
     if (prevThemeRef.current !== theme.type) {
       prevThemeRef.current = theme.type;
 
-      if (cloudsRef.current) {
+      if (innerGroupRef.current) {
         const tl = gsap.timeline();
-        const innerGroup = cloudsRef.current.children[0] as THREE.Group;
+        const innerGroup = innerGroupRef.current;
 
         // Sweep from Left to Right
         // Extended Sweep for total width coverage
@@ -62,7 +63,7 @@ const ThemeTransition = () => {
 
   return (
     <group ref={cloudsRef}>
-      <group position={[-25, 0, 0]}>
+      <group ref={innerGroupRef} position={[-25, 0, 0]}>
         <Clouds material={THREE.MeshBasicMaterial} renderOrder={999}>
           <meshBasicMaterial depthTest={false} transparent={false} opacity={1} />
           {/* Exact Mirror of Hero Cloud Parameters */}

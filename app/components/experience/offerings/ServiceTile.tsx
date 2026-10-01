@@ -126,7 +126,7 @@ const ServiceTile = ({
     gsap
       .to(button.position, { z: 0, duration: 0.1 })
       .then(() => gsap.to(button.position, { z: 0.3, duration: 0.3 }));
-    setTimeout(() => window.open(whatsappServiceLink(service.title), '_blank'), 50);
+    window.open(whatsappServiceLink(service.title), '_blank');
   };
 
   return (
