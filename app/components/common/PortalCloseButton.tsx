@@ -1,8 +1,8 @@
 'use client';
 
-import { usePortalStore } from "@stores";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { usePortalStore } from '@stores';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 const PortalCloseButton = () => {
   const activePortalId = usePortalStore((state) => state.activePortalId);
@@ -11,24 +11,24 @@ const PortalCloseButton = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         setActivePortal(null);
       }
     };
 
     if (activePortalId) {
-      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener('keydown', handleKeyDown);
       if (btnRef.current) {
         gsap.fromTo(
           btnRef.current,
           { scale: 0, rotate: -180, opacity: 0 },
-          { scale: 1, rotate: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)" }
+          { scale: 1, rotate: 0, opacity: 1, duration: 0.5, ease: 'back.out(1.5)' },
         );
       }
     }
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [activePortalId, setActivePortal]);
 

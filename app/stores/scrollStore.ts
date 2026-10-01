@@ -9,6 +9,3 @@ export const useScrollStore = create<ScrollStore>((set) => ({
   scrollProgress: 0,
   setScrollProgress: (progress) => set(() => ({ scrollProgress: progress })),
 }));
-
-
-

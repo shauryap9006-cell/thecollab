@@ -1,10 +1,17 @@
 'use client';
 
-import { Edges, MeshPortalMaterial, Text, TextProps, useCursor, useScroll } from '@react-three/drei';
+import {
+  Edges,
+  MeshPortalMaterial,
+  Text,
+  TextProps,
+  useCursor,
+  useScroll,
+} from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { usePortalStore } from '@stores';
 import { withBasePath } from '@constants';
-import gsap from "gsap";
+import gsap from 'gsap';
 import { useEffect, useRef, useState } from 'react';
 import { useIsMobile } from '@/app/hooks/useIsMobile';
 import * as THREE from 'three';
@@ -109,7 +116,7 @@ const GridTile = (props: GridTileProps) => {
   };
 
   const fontProps: Partial<TextProps> = {
-    font: withBasePath("./soria-font.ttf"),
+    font: withBasePath('./soria-font.ttf'),
     maxWidth: 2,
     anchorX: 'center',
     anchorY: 'bottom',
@@ -123,7 +130,7 @@ const GridTile = (props: GridTileProps) => {
     if (isActive || isMobile) return;
     setHovered(true);
     gsap.to(titleRef.current, {
-      fillOpacity: 1
+      fillOpacity: 1,
     });
     if (gridRef.current && hoverBoxRef.current) {
       gsap.to(gridRef.current.position, { z: 0.3, duration: 0.4 });
@@ -135,7 +142,7 @@ const GridTile = (props: GridTileProps) => {
     if (isMobile) return;
     setHovered(false);
     gsap.to(titleRef.current, {
-      fillOpacity: 0
+      fillOpacity: 0,
     });
     if (gridRef.current && hoverBoxRef.current) {
       gsap.to(gridRef.current.position, { z: 0, duration: 0.4 });
@@ -146,32 +153,38 @@ const GridTile = (props: GridTileProps) => {
 
   const getGeometry = () => {
     if (!isMobile) {
-      return <planeGeometry args={[4, 4, 1]} />
+      return <planeGeometry args={[4, 4, 1]} />;
     }
 
     const isServices = id === 'services';
-    const points = isServices ?
-      [[-1, 2, 0], [-1, -2, 0], [3, -2, 0]] :
-      [[-3, 2, 0], [1, -2, 0], [1, 2, 0]];
+    const points = isServices
+      ? [
+          [-1, 2, 0],
+          [-1, -2, 0],
+          [3, -2, 0],
+        ]
+      : [
+          [-3, 2, 0],
+          [1, -2, 0],
+          [1, 2, 0],
+        ];
 
     return <TriangleMesh points={points} />;
   };
 
   return (
-    <mesh ref={gridRef}
+    <mesh
+      ref={gridRef}
       position={position}
       onClick={portalInto}
       onPointerOver={onPointerOver}
-      onPointerOut={onPointerOut}>
+      onPointerOut={onPointerOut}
+    >
       {getGeometry()}
       <group>
         <mesh position={[0, 0, -0.01]} ref={hoverBoxRef} scale={[0, 0, 0]}>
           <boxGeometry args={[4, 4, 0.5]} />
-          <meshPhysicalMaterial
-            color="#444"
-            transparent={true}
-            opacity={0.3}
-          />
+          <meshPhysicalMaterial color="#444" transparent={true} opacity={0.3} />
           <Edges color="white" lineWidth={3} />
         </mesh>
         <Text position={[0, -1.8, 0.4]} {...fontProps} ref={titleRef}>
@@ -184,10 +197,6 @@ const GridTile = (props: GridTileProps) => {
       </MeshPortalMaterial>
     </mesh>
   );
-}
+};
 
 export default GridTile;
-
-
-
-

@@ -1,20 +1,20 @@
 'use client';
 
-import { useScroll } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import gsap from "gsap";
-import { useEffect } from "react";
-import { useIsMobile } from "@/app/hooks/useIsMobile";
-import * as THREE from "three";
-import { usePortalStore } from "@stores";
-import { Wanderer } from "../../models/Wanderer";
-import OfferingsCarousel from "./OfferingsCarousel";
-import { TouchPanControls } from "../projects/TouchPanControls";
+import { useScroll } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import gsap from 'gsap';
+import { useEffect } from 'react';
+import { useIsMobile } from '@/app/hooks/useIsMobile';
+import * as THREE from 'three';
+import { usePortalStore } from '@stores';
+import { Wanderer } from '../../models/Wanderer';
+import OfferingsCarousel from './OfferingsCarousel';
+import { TouchPanControls } from '../projects/TouchPanControls';
 
 const Offerings = () => {
   const { camera } = useThree();
   const isMobile = useIsMobile();
-  const isActive = usePortalStore((state) => state.activePortalId === "offerings");
+  const isActive = usePortalStore((state) => state.activePortalId === 'offerings');
   const data = useScroll();
 
   useEffect(() => {
@@ -32,17 +32,26 @@ const Offerings = () => {
   useFrame((state, delta) => {
     if (isActive) {
       if (!isMobile) {
-        camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, -(state.pointer.x * Math.PI) / 4, 0.03);
-        camera.position.z = THREE.MathUtils.damp(camera.position.z, 11.5 - state.pointer.y, 7, delta);
+        camera.rotation.y = THREE.MathUtils.lerp(
+          camera.rotation.y,
+          -(state.pointer.x * Math.PI) / 4,
+          0.03,
+        );
+        camera.position.z = THREE.MathUtils.damp(
+          camera.position.z,
+          11.5 - state.pointer.y,
+          7,
+          delta,
+        );
       }
     }
   });
 
   return (
     <group>
-      <Wanderer rotation={[0, Math.PI / 6, 0]} scale={[1.5, 1.5, 1.5]} position={[0, -1, -1]}/>
+      <Wanderer rotation={[0, Math.PI / 6, 0]} scale={[1.5, 1.5, 1.5]} position={[0, -1, -1]} />
       <OfferingsCarousel />
-      { isActive && isMobile && <TouchPanControls /> }
+      {isActive && isMobile && <TouchPanControls />}
     </group>
   );
 };

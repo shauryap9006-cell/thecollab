@@ -1,17 +1,17 @@
 'use client';
 
-import { Text } from "@react-three/drei";
+import { Text } from '@react-three/drei';
 
-import { useProgress } from "@react-three/drei";
-import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { SITE, whatsappLink, withBasePath } from "@constants";
-import { useCursor } from "@react-three/drei";
-import CloudContainer from "../models/Cloud";
-import StarsContainer from "../models/Stars";
-import WindowModel from "../models/WindowModel";
-import TextWindow from "./TextWindow";
+import { useProgress } from '@react-three/drei';
+import gsap from 'gsap';
+import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { SITE, whatsappLink, withBasePath } from '@constants';
+import { useCursor } from '@react-three/drei';
+import CloudContainer from '../models/Cloud';
+import StarsContainer from '../models/Stars';
+import WindowModel from '../models/WindowModel';
+import TextWindow from './TextWindow';
 
 const Hero = () => {
   const titleRef = useRef<THREE.Mesh>(null);
@@ -23,7 +23,12 @@ const Hero = () => {
     if (progress === 100) {
       const tl = gsap.timeline();
       if (titleRef.current) {
-        tl.fromTo(titleRef.current.position, { y: -10 }, { y: 0, duration: 3, ease: 'power2.out' }, 0);
+        tl.fromTo(
+          titleRef.current.position,
+          { y: -10 },
+          { y: 0, duration: 3, ease: 'power2.out' },
+          0,
+        );
       }
       if (ctaRef.current) {
         tl.fromTo(ctaRef.current.position, { y: -4 }, { y: 0, duration: 2, ease: 'power2.out' }, 1);
@@ -52,19 +57,22 @@ const Hero = () => {
   useCursor(ctaHovered);
 
   const fontProps = {
-    font: withBasePath("./soria-font.ttf"),
+    font: withBasePath('./soria-font.ttf'),
     fontSize: 1.2,
   };
 
   return (
     <>
-      <Text position={[0, 2, -10]} {...fontProps} ref={titleRef}>thecollab.</Text>
+      <Text position={[0, 2, -10]} {...fontProps} ref={titleRef}>
+        thecollab.
+      </Text>
       <Text
-        font={withBasePath("./Vercetti-Regular.woff")}
+        font={withBasePath('./Vercetti-Regular.woff')}
         fontSize={0.35}
         color="#9fd9ea"
         position={[0, 1, -10]}
-        anchorX="center">
+        anchorX="center"
+      >
         {SITE.tagline}
       </Text>
       <StarsContainer />
@@ -76,7 +84,8 @@ const Hero = () => {
         position={[2.6, -0.6, -9.5]}
         onClick={() => window.open(whatsappLink(), '_blank')}
         onPointerOver={() => setCtaHovered(true)}
-        onPointerOut={() => setCtaHovered(false)}>
+        onPointerOut={() => setCtaHovered(false)}
+      >
         <mesh>
           <boxGeometry args={[2.2, 0.6, 0.1]} />
           <meshPhysicalMaterial
@@ -88,12 +97,13 @@ const Hero = () => {
           />
         </mesh>
         <Text
-          font={withBasePath("./Vercetti-Regular.woff")}
+          font={withBasePath('./Vercetti-Regular.woff')}
           fontSize={0.24}
           color="white"
           position={[0, 0, 0.1]}
           anchorX="center"
-          anchorY="middle">
+          anchorY="middle"
+        >
           START A PROJECT ↗
         </Text>
       </group>

@@ -1,25 +1,73 @@
 'use client';
 
-import { useScroll, Stars, Cloud, Clouds } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import gsap from "gsap";
-import { useEffect, useRef } from "react";
-import { useIsMobile } from "@/app/hooks/useIsMobile";
-import * as THREE from "three";
-import { usePortalStore, useThemeStore, useIndustryStore } from "@stores";
-import { INDUSTRIES } from "@constants";
-import IndustryFrame from "./IndustryFrame";
-import { TouchPanControls } from "../projects/TouchPanControls";
+import { useScroll, Stars, Cloud, Clouds } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import gsap from 'gsap';
+import { useEffect, useRef } from 'react';
+import { useIsMobile } from '@/app/hooks/useIsMobile';
+import * as THREE from 'three';
+import { usePortalStore, useThemeStore, useIndustryStore } from '@stores';
+import { INDUSTRIES } from '@constants';
+import IndustryFrame from './IndustryFrame';
+import { TouchPanControls } from '../projects/TouchPanControls';
 
 const STATIC_CLOUDS = [
-  { seed: 42, position: [-45, 12, -35] as [number, number, number], volume: 8, opacity: 0.4, scale: 1.4 },
-  { seed: 105, position: [35, -8, -50] as [number, number, number], volume: 11, opacity: 0.35, scale: 1.8 },
-  { seed: 217, position: [-20, -15, -40] as [number, number, number], volume: 9, opacity: 0.5, scale: 1.2 },
-  { seed: 334, position: [15, 18, -60] as [number, number, number], volume: 12, opacity: 0.3, scale: 2.0 },
-  { seed: 489, position: [-60, -5, -70] as [number, number, number], volume: 14, opacity: 0.3, scale: 2.2 },
-  { seed: 562, position: [50, 10, -45] as [number, number, number], volume: 7, opacity: 0.45, scale: 1.3 },
-  { seed: 671, position: [-5, 5, -55] as [number, number, number], volume: 10, opacity: 0.4, scale: 1.6 },
-  { seed: 789, position: [25, -12, -65] as [number, number, number], volume: 13, opacity: 0.35, scale: 1.9 },
+  {
+    seed: 42,
+    position: [-45, 12, -35] as [number, number, number],
+    volume: 8,
+    opacity: 0.4,
+    scale: 1.4,
+  },
+  {
+    seed: 105,
+    position: [35, -8, -50] as [number, number, number],
+    volume: 11,
+    opacity: 0.35,
+    scale: 1.8,
+  },
+  {
+    seed: 217,
+    position: [-20, -15, -40] as [number, number, number],
+    volume: 9,
+    opacity: 0.5,
+    scale: 1.2,
+  },
+  {
+    seed: 334,
+    position: [15, 18, -60] as [number, number, number],
+    volume: 12,
+    opacity: 0.3,
+    scale: 2.0,
+  },
+  {
+    seed: 489,
+    position: [-60, -5, -70] as [number, number, number],
+    volume: 14,
+    opacity: 0.3,
+    scale: 2.2,
+  },
+  {
+    seed: 562,
+    position: [50, 10, -45] as [number, number, number],
+    volume: 7,
+    opacity: 0.45,
+    scale: 1.3,
+  },
+  {
+    seed: 671,
+    position: [-5, 5, -55] as [number, number, number],
+    volume: 10,
+    opacity: 0.4,
+    scale: 1.6,
+  },
+  {
+    seed: 789,
+    position: [25, -12, -65] as [number, number, number],
+    volume: 13,
+    opacity: 0.35,
+    scale: 1.9,
+  },
 ];
 
 const CloudsLayer = ({ isNight }: { isNight: boolean }) => {
@@ -41,7 +89,7 @@ const CloudsLayer = ({ isNight }: { isNight: boolean }) => {
             <Cloud
               seed={cloud.seed}
               segments={1}
-              color={isNight ? "#e0e0e0" : "#ffffff"}
+              color={isNight ? '#e0e0e0' : '#ffffff'}
               volume={cloud.volume}
               growth={4}
               opacity={cloud.opacity}
@@ -54,7 +102,13 @@ const CloudsLayer = ({ isNight }: { isNight: boolean }) => {
   );
 };
 
-const IndustryCarousel = ({ onSelect, activeId }: { onSelect: (industry: typeof INDUSTRIES[0]) => void, activeId: number | null }) => {
+const IndustryCarousel = ({
+  onSelect,
+  activeId,
+}: {
+  onSelect: (industry: (typeof INDUSTRIES)[0]) => void;
+  activeId: number | null;
+}) => {
   return (
     <group position={[0, 0, -5]}>
       {/* Floating Industries in a gentle curve/arc for better depth */}
@@ -94,7 +148,7 @@ const IndustryCarousel = ({ onSelect, activeId }: { onSelect: (industry: typeof 
 const Industries = () => {
   const { camera } = useThree();
   const isMobile = useIsMobile();
-  const isActive = usePortalStore((state) => state.activePortalId === "industries");
+  const isActive = usePortalStore((state) => state.activePortalId === 'industries');
   const { theme } = useThemeStore();
   const data = useScroll();
   const mouseLightRef = useRef<THREE.PointLight>(null);
@@ -116,13 +170,30 @@ const Industries = () => {
     if (isActive) {
       if (!isMobile) {
         // Parallax Effect
-        camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, -(state.pointer.x * Math.PI) / 6, 0.03);
-        camera.position.z = THREE.MathUtils.damp(camera.position.z, 11.5 - state.pointer.y, 7, delta);
+        camera.rotation.y = THREE.MathUtils.lerp(
+          camera.rotation.y,
+          -(state.pointer.x * Math.PI) / 6,
+          0.03,
+        );
+        camera.position.z = THREE.MathUtils.damp(
+          camera.position.z,
+          11.5 - state.pointer.y,
+          7,
+          delta,
+        );
 
         // Update Mouse Follow Light
         if (mouseLightRef.current) {
-          mouseLightRef.current.position.x = THREE.MathUtils.lerp(mouseLightRef.current.position.x, state.pointer.x * 10, 0.1);
-          mouseLightRef.current.position.y = THREE.MathUtils.lerp(mouseLightRef.current.position.y, state.pointer.y * 5, 0.1);
+          mouseLightRef.current.position.x = THREE.MathUtils.lerp(
+            mouseLightRef.current.position.x,
+            state.pointer.x * 10,
+            0.1,
+          );
+          mouseLightRef.current.position.y = THREE.MathUtils.lerp(
+            mouseLightRef.current.position.y,
+            state.pointer.y * 5,
+            0.1,
+          );
         }
       }
     }
@@ -130,7 +201,7 @@ const Industries = () => {
 
   // Inverse Sky Theme
   const isNight = theme.type === 'light';
-  const skyColor = isNight ? "#0a0a0a" : "#0690d4"; // Darker night for more depth
+  const skyColor = isNight ? '#0a0a0a' : '#0690d4'; // Darker night for more depth
 
   return (
     <>
@@ -141,7 +212,17 @@ const Industries = () => {
         {/* Curated majestic background clouds moving in a continuous flow */}
         <CloudsLayer isNight={isNight} />
 
-        {isNight && <Stars radius={200} depth={100} count={5000} factor={10} saturation={10} fade={true} speed={1} />}
+        {isNight && (
+          <Stars
+            radius={200}
+            depth={100}
+            count={5000}
+            factor={10}
+            saturation={10}
+            fade={true}
+            speed={1}
+          />
+        )}
 
         <ambientLight intensity={isNight ? 0.3 : 1.5} />
         <pointLight
@@ -150,10 +231,13 @@ const Industries = () => {
           intensity={80}
           decay={2}
           distance={25}
-          color={isNight ? "#60a5fa" : "#ffffff"}
+          color={isNight ? '#60a5fa' : '#ffffff'}
         />
 
-        <IndustryCarousel onSelect={setSelectedIndustry} activeId={selectedIndustry ? INDUSTRIES.indexOf(selectedIndustry) : null} />
+        <IndustryCarousel
+          onSelect={setSelectedIndustry}
+          activeId={selectedIndustry ? INDUSTRIES.indexOf(selectedIndustry) : null}
+        />
         {isActive && isMobile && <TouchPanControls />}
       </group>
     </>

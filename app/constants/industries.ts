@@ -1,4 +1,4 @@
-import { Industry } from "../types";
+import { Industry } from '../types';
 
 /**
  * WHO WE WORK WITH — two broad segments, one frame each.

@@ -1,10 +1,10 @@
 'use client';
 
-import { Text, Float, Edges } from "@react-three/drei";
-import { useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import gsap from "gsap";
-import { withBasePath } from "@constants";
+import { Text, Float, Edges } from '@react-three/drei';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import gsap from 'gsap';
+import { withBasePath } from '@constants';
 
 interface IndustryFrameProps {
   title: string;
@@ -32,12 +32,13 @@ const Emblem = ({ title }: { title: string }) => {
         />
       </mesh>
       <Text
-        font={withBasePath("./soria-font.ttf")}
+        font={withBasePath('./soria-font.ttf')}
         fontSize={0.3}
         color="#ffd700"
         anchorX="center"
         anchorY="middle"
-        position={[0, 0, 0.08]}>
+        position={[0, 0, 0.08]}
+      >
         {initial}
       </Text>
     </group>
@@ -50,7 +51,7 @@ const IndustryFrame = ({
   position,
   rotation,
   forceHover,
-  onClick
+  onClick,
 }: IndustryFrameProps) => {
   const frameRef = useRef<THREE.Group>(null);
   const textGroupRef = useRef<THREE.Group>(null);
@@ -68,7 +69,7 @@ const IndustryFrame = ({
       y: isHighlighted ? 1.15 : 1,
       z: isHighlighted ? 1.15 : 1,
       duration: 0.4,
-      ease: "power2.out"
+      ease: 'power2.out',
     });
 
     if (textGroup) {
@@ -84,19 +85,23 @@ const IndustryFrame = ({
     };
   }, [isHighlighted]);
 
-  const glassMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
-    thickness: 0.4,
-    roughness: 0.05,
-    transmission: 1.0,
-    ior: 1.45,
-    dispersion: 8,
-    clearcoat: 1.0,
-    color: '#ffffff',
-    transparent: true,
-    opacity: 0.3,
-    clearcoatRoughness: 0,
-    reflectivity: 0.5,
-  }), []);
+  const glassMaterial = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        thickness: 0.4,
+        roughness: 0.05,
+        transmission: 1.0,
+        ior: 1.45,
+        dispersion: 8,
+        clearcoat: 1.0,
+        color: '#ffffff',
+        transparent: true,
+        opacity: 0.3,
+        clearcoatRoughness: 0,
+        reflectivity: 0.5,
+      }),
+    [],
+  );
 
   useEffect(() => {
     return () => {
@@ -105,7 +110,12 @@ const IndustryFrame = ({
   }, [glassMaterial]);
 
   return (
-    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4} position={position as THREE.Vector3}>
+    <Float
+      speed={1.5}
+      rotationIntensity={0.2}
+      floatIntensity={0.4}
+      position={position as THREE.Vector3}
+    >
       <group
         ref={frameRef}
         rotation={rotation}
@@ -129,37 +139,40 @@ const IndustryFrame = ({
 
         {/* Industry wordmark */}
         <Text
-          font={withBasePath("./soria-font.ttf")}
+          font={withBasePath('./soria-font.ttf')}
           fontSize={0.42}
           color="white"
           position={[0, 0.25, 0.08]}
           anchorX="center"
           anchorY="middle"
-          maxWidth={3.6}>
+          maxWidth={3.6}
+        >
           {title.toUpperCase()}
         </Text>
         <Text
-          font={withBasePath("./Vercetti-Regular.woff")}
+          font={withBasePath('./Vercetti-Regular.woff')}
           fontSize={0.18}
           color="#9fd9ea"
           position={[0, -0.25, 0.08]}
           anchorX="center"
           anchorY="middle"
-          letterSpacing={0.2}>
+          letterSpacing={0.2}
+        >
           {date.toUpperCase()}
         </Text>
 
         {/* Text Info (Small, floating below) */}
         <group ref={textGroupRef} position={[0, -1.5, 0.1]}>
           <Text
-            font={withBasePath("./Vercetti-Regular.woff")}
+            font={withBasePath('./Vercetti-Regular.woff')}
             fontSize={0.16}
             color="#ccc"
             position={[0, -0.1, 0]}
             maxWidth={3.5}
             anchorX="center"
             anchorY="top"
-            fillOpacity={isHighlighted ? 1 : 0}>
+            fillOpacity={isHighlighted ? 1 : 0}
+          >
             CLICK TO SEE HOW WE HELP
           </Text>
         </group>

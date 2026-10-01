@@ -1,10 +1,10 @@
 'use client';
 
-import CanvasLoader from "./components/common/CanvasLoader";
-import ScrollWrapper from "./components/common/ScrollWrapper";
-import Experience from "./components/experience";
-import Footer from "./components/footer";
-import Hero from "./components/hero";
+import CanvasLoader from './components/common/CanvasLoader';
+import ScrollWrapper from './components/common/ScrollWrapper';
+import Experience from './components/experience';
+import Footer from './components/footer';
+import Hero from './components/hero';
 
 const Home = () => {
   return (
@@ -18,6 +18,3 @@ const Home = () => {
   );
 };
 export default Home;
-
-
-

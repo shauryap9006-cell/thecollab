@@ -1,16 +1,16 @@
 'use client';
 
-import { Text, useScroll } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { usePortalStore, useThemeStore } from "@stores";
-import { withBasePath } from "@constants";
-import { useRef } from "react";
-import { useIsMobile } from "@/app/hooks/useIsMobile";
+import { Text, useScroll } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { usePortalStore, useThemeStore } from '@stores';
+import { withBasePath } from '@constants';
+import { useRef } from 'react';
+import { useIsMobile } from '@/app/hooks/useIsMobile';
 import * as THREE from 'three';
-import GridTile from "./GridTile";
-import Industries from "./industries";
-import Offerings from "./offerings";
-import Services from "./services";
+import GridTile from './GridTile';
+import Industries from './industries';
+import Offerings from './offerings';
+import Services from './services';
 
 const Experience = () => {
   const { theme } = useThemeStore();
@@ -21,7 +21,7 @@ const Experience = () => {
   const isActive = usePortalStore((state) => !!state.activePortalId);
 
   const fontProps = {
-    font: withBasePath("./soria-font.ttf"),
+    font: withBasePath('./soria-font.ttf'),
     fontSize: 0.4,
     color: 'white',
   };
@@ -35,9 +35,21 @@ const Experience = () => {
       // Enhanced Parallax Sway
       const targetX = -state.pointer.x * (isMobile ? 0.1 : 0.4); // Reversed
       const targetZ = -state.pointer.y * (isMobile ? 0.05 : 0.2); // Reversed
-      groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, 0.05);
-      groupRef.current.position.z = THREE.MathUtils.lerp(groupRef.current.position.z, targetZ, 0.05);
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetX * 0.1, 0.05); // Reversed
+      groupRef.current.position.x = THREE.MathUtils.lerp(
+        groupRef.current.position.x,
+        targetX,
+        0.05,
+      );
+      groupRef.current.position.z = THREE.MathUtils.lerp(
+        groupRef.current.position.z,
+        targetZ,
+        0.05,
+      );
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        targetX * 0.1,
+        0.05,
+      ); // Reversed
     }
 
     if (titleRef.current) {
@@ -57,7 +69,9 @@ const Experience = () => {
     return title.split('').map((char, i) => {
       const diff = isMobile ? 0.4 : 0.8;
       return (
-        <Text key={i} {...fontProps} position={[i * diff, 2, 1]}>{char === ' ' ? '' : char}</Text>
+        <Text key={i} {...fontProps} position={[i * diff, 2, 1]}>
+          {char === ' ' ? '' : char}
+        </Text>
       );
     });
   };
@@ -74,25 +88,31 @@ const Experience = () => {
         </group>
 
         <group position={[0, -1, 0]} ref={groupRef} scale={0.9}>
-          <GridTile title='SERVICES'
+          <GridTile
+            title="SERVICES"
             id="services"
-            color='#b9c6d6'
-            textAlign='left'
-            position={[isMobile ? -2.2 : -4.05, 0, isMobile ? 0.4 : 0]}>
+            color="#b9c6d6"
+            textAlign="left"
+            position={[isMobile ? -2.2 : -4.05, 0, isMobile ? 0.4 : 0]}
+          >
             <Services />
           </GridTile>
-          <GridTile title='OFFERINGS'
+          <GridTile
+            title="OFFERINGS"
             id="offerings"
-            color='#bdd1e3'
-            textAlign='center'
-            position={[0, 0, 0]}>
+            color="#bdd1e3"
+            textAlign="center"
+            position={[0, 0, 0]}
+          >
             <Offerings />
           </GridTile>
-          <GridTile title='WHO WE WORK WITH'
+          <GridTile
+            title="WHO WE WORK WITH"
             id="industries"
             color={theme?.type === 'dark' ? '#0690d4' : '#111111'}
-            textAlign='right'
-            position={[isMobile ? 2.2 : 4.05, 0, isMobile ? 0.4 : 0]}>
+            textAlign="right"
+            position={[isMobile ? 2.2 : 4.05, 0, isMobile ? 0.4 : 0]}
+          >
             <Industries />
           </GridTile>
         </group>
@@ -102,7 +122,3 @@ const Experience = () => {
 };
 
 export default Experience;
-
-
-
-

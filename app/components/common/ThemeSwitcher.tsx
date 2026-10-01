@@ -1,11 +1,11 @@
 'use client';
 
-import { useGSAP } from "@gsap/react";
-import { usePortalStore, useThemeStore } from "@stores";
-import { withBasePath } from "@constants";
-import gsap from "gsap";
+import { useGSAP } from '@gsap/react';
+import { usePortalStore, useThemeStore } from '@stores';
+import { withBasePath } from '@constants';
+import gsap from 'gsap';
 import Image from 'next/image';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 const ThemeSwitcher = () => {
   const themeSwitcherRef = useRef<HTMLDivElement>(null);
@@ -42,7 +42,7 @@ const ThemeSwitcher = () => {
           className="p-2 rounded-full hover:bg-white/10 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 cursor-pointer"
         >
           <Image
-            src={withBasePath("icons/night-mode.svg")}
+            src={withBasePath('icons/night-mode.svg')}
             width={24}
             height={24}
             alt="Toggle theme"

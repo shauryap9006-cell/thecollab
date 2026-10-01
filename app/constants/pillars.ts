@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import { Pillar } from "../types";
+import * as THREE from 'three';
+import { Pillar } from '../types';
 
 /**
  * The four pillars of thecollab, plotted along the scroll-driven

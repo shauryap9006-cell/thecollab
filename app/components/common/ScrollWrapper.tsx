@@ -1,12 +1,12 @@
 'use client';
 
-import { useScroll } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import { useRef } from "react";
-import * as THREE from "three";
+import { useScroll } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useRef } from 'react';
+import * as THREE from 'three';
 
-import { usePortalStore, useScrollStore } from "@stores";
-import { useIsMobile } from "@/app/hooks/useIsMobile";
+import { usePortalStore, useScrollStore } from '@stores';
+import { useIsMobile } from '@/app/hooks/useIsMobile';
 
 const ScrollWrapper = (props: { children: React.ReactNode }) => {
   const { camera } = useThree();
@@ -36,7 +36,11 @@ const ScrollWrapper = (props: { children: React.ReactNode }) => {
 
       // Move camera slightly on mouse movement.
       if (!isMobile && !isActive) {
-        camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, -(state.pointer.x * Math.PI) / 90, 0.05);
+        camera.rotation.y = THREE.MathUtils.lerp(
+          camera.rotation.y,
+          -(state.pointer.x * Math.PI) / 90,
+          0.05,
+        );
       }
     }
   });

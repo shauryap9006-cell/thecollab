@@ -8,7 +8,4 @@ interface PortalStore {
 export const usePortalStore = create<PortalStore>((set) => ({
   activePortalId: null,
   setActivePortal: (activePortalId) => set(() => ({ activePortalId })),
-}))
-
-
-
+}));

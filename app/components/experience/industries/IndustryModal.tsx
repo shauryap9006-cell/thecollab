@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef } from "react";
-import gsap from "gsap";
-import { useIndustryStore } from "@stores";
-import { whatsappLink } from "@constants";
+import { useCallback, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { useIndustryStore } from '@stores';
+import { whatsappLink } from '@constants';
 
 const IndustryModal = () => {
   const { selectedIndustry, setSelectedIndustry } = useIndustryStore();
@@ -19,9 +19,9 @@ const IndustryModal = () => {
         previousFocusRef.current?.focus();
       },
     });
-    tl.to(modalRef.current, { scale: 0.9, opacity: 0, y: 10, duration: 0.3, ease: "power2.in" });
-    tl.to(overlayRef.current, { opacity: 0, duration: 0.2 }, "-=0.1");
-    tl.set(overlayRef.current, { pointerEvents: "none" });
+    tl.to(modalRef.current, { scale: 0.9, opacity: 0, y: 10, duration: 0.3, ease: 'power2.in' });
+    tl.to(overlayRef.current, { opacity: 0, duration: 0.2 }, '-=0.1');
+    tl.set(overlayRef.current, { pointerEvents: 'none' });
   }, [setSelectedIndustry]);
 
   useEffect(() => {
@@ -34,24 +34,24 @@ const IndustryModal = () => {
           closeButtonRef.current?.focus();
         },
       });
-      tl.set(overlayRef.current, { pointerEvents: "auto" });
+      tl.set(overlayRef.current, { pointerEvents: 'auto' });
       tl.to(overlayRef.current, { opacity: 1, duration: 0.3 });
       tl.fromTo(
         modalRef.current,
         { scale: 0.8, opacity: 0, y: 20 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.2)" },
-        "-=0.2"
+        { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.2)' },
+        '-=0.2',
       );
 
       const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
+        if (e.key === 'Escape') {
           handleClose();
         }
       };
 
-      window.addEventListener("keydown", onKeyDown);
+      window.addEventListener('keydown', onKeyDown);
       return () => {
-        window.removeEventListener("keydown", onKeyDown);
+        window.removeEventListener('keydown', onKeyDown);
         tl.kill();
       };
     }
@@ -76,7 +76,10 @@ const IndustryModal = () => {
         {/* Animated Liquid Background Blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
           <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/20 rounded-full blur-[80px] animate-liquid" />
-          <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-[80px] animate-liquid" style={{ animationDelay: '-5s' }} />
+          <div
+            className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-[80px] animate-liquid"
+            style={{ animationDelay: '-5s' }}
+          />
         </div>
 
         {/* Close Button */}
@@ -86,7 +89,17 @@ const IndustryModal = () => {
           aria-label="Close modal"
           className="absolute top-6 right-6 z-20 p-2.5 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all border border-white/10 backdrop-blur-md group focus-visible:outline-2 focus-visible:outline-white"
         >
-          <svg className="transition-transform group-hover:rotate-90" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="transition-transform group-hover:rotate-90"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -97,7 +110,10 @@ const IndustryModal = () => {
           <p className="text-blue-400 text-xs font-bold tracking-[0.2em] uppercase mb-2 opacity-80">
             {selectedIndustry.date}
           </p>
-          <h2 id="industry-modal-title" className="text-3xl md:text-4xl font-extrabold text-white leading-[1.1] tracking-tight">
+          <h2
+            id="industry-modal-title"
+            className="text-3xl md:text-4xl font-extrabold text-white leading-[1.1] tracking-tight"
+          >
             {selectedIndustry.title}
           </h2>
           <div className="flex items-center gap-2 mt-4 text-neutral-400 font-medium text-sm">
@@ -113,7 +129,9 @@ const IndustryModal = () => {
 
           <div className="pt-8 flex flex-col sm:flex-row gap-3">
             <a
-              href={whatsappLink(`Hi thecollab! I run a ${selectedIndustry.title.toLowerCase()} business and I'd like to grow my online presence.`)}
+              href={whatsappLink(
+                `Hi thecollab! I run a ${selectedIndustry.title.toLowerCase()} business and I'd like to grow my online presence.`,
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative flex-1 inline-flex items-center justify-center py-4 px-8 bg-white text-black font-bold rounded-2xl overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] text-center focus-visible:outline-2 focus-visible:outline-white"

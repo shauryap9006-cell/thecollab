@@ -1,27 +1,31 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
-import "./globals.css";
+import './globals.css';
 
 const soriaFont = localFont({
-  src: "../public/soria-font.ttf",
-  variable: "--font-soria",
+  src: '../public/soria-font.ttf',
+  variable: '--font-soria',
+  display: 'swap',
+  fallback: ['serif'],
 });
 
 const vercettiFont = localFont({
-  src: "../public/Vercetti-Regular.woff",
-  variable: "--font-vercetti",
+  src: '../public/Vercetti-Regular.woff',
+  variable: '--font-vercetti',
+  display: 'swap',
+  fallback: ['sans-serif'],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shauryap9006-cell.github.io"),
-  title: "thecollab — Your Website. Your Brand. Your Reach.",
+  metadataBase: new URL('https://shauryap9006-cell.github.io'),
+  title: 'thecollab — Your Website. Your Brand. Your Reach.',
   description:
-    "thecollab is a digital growth agency helping businesses build a stronger online presence through high-quality websites, social media content, and creator-led marketing campaigns.",
+    'thecollab is a digital growth agency helping businesses build a stronger online presence through high-quality websites, social media content, and creator-led marketing campaigns.',
   keywords:
-    "thecollab, digital growth agency, website development, Instagram marketing, creator collaborations, influencer marketing, local marketing, reels, social media strategy, brand presence",
-  authors: [{ name: "thecollab" }],
-  creator: "thecollab",
-  publisher: "thecollab",
+    'thecollab, digital growth agency, website development, Instagram marketing, creator collaborations, influencer marketing, local marketing, reels, social media strategy, brand presence',
+  authors: [{ name: 'thecollab' }],
+  creator: 'thecollab',
+  publisher: 'thecollab',
   formatDetection: {
     email: false,
     address: false,
@@ -38,27 +42,27 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "thecollab — Your Website. Your Brand. Your Reach.",
+    title: 'thecollab — Your Website. Your Brand. Your Reach.',
     description:
-      "A digital growth agency: websites, social media, and creator-led marketing campaigns.",
-    url: "https://shauryap9006-cell.github.io/thecollab",
-    siteName: "thecollab",
-    locale: "en_US",
-    type: "website",
+      'A digital growth agency: websites, social media, and creator-led marketing campaigns.',
+    url: 'https://shauryap9006-cell.github.io/thecollab',
+    siteName: 'thecollab',
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "thecollab — Your Website. Your Brand. Your Reach.",
+    card: 'summary_large_image',
+    title: 'thecollab — Your Website. Your Brand. Your Reach.',
     description:
-      "A digital growth agency: websites, social media, and creator-led marketing campaigns.",
+      'A digital growth agency: websites, social media, and creator-led marketing campaigns.',
   },
   icons: {
-    icon: '/favicon.svg',
+    icon: `${process.env.NEXT_PUBLIC_BASE_PATH || '/thecollab'}/favicon.svg`,
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: '#000000',
   initialScale: 1,
   minimumScale: 1,
   maximumScale: 1,
@@ -71,9 +75,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="overscroll-y-none">
-      <body
-        className={`${soriaFont.variable} ${vercettiFont.variable} font-sans antialiased`}
-      >
+      <body className={`${soriaFont.variable} ${vercettiFont.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

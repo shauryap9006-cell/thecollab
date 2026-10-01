@@ -1,42 +1,59 @@
 'use client';
 
-import { Box, Edges, Line, Text, TextProps } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import { usePortalStore } from "@stores";
-import gsap from "gsap";
-import { useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { JOURNEY_STEPS, PILLAR_TIMELINE, withBasePath } from "@constants";
-import { Pillar } from "@types";
-import { useIsMobile } from "@/app/hooks/useIsMobile";
+import { Box, Edges, Line, Text, TextProps } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import { usePortalStore } from '@stores';
+import gsap from 'gsap';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { JOURNEY_STEPS, PILLAR_TIMELINE, withBasePath } from '@constants';
+import { Pillar } from '@types';
+import { useIsMobile } from '@/app/hooks/useIsMobile';
 
 const reusableLeft = new THREE.Vector3(-0.3, 0, -0.1);
 const reusableRight = new THREE.Vector3(0.3, 0, -0.1);
 
-const TimelinePoint = ({ point, diff, isMobile }: { point: Pillar, diff: number, isMobile: boolean }) => {
+const TimelinePoint = ({
+  point,
+  diff,
+  isMobile,
+}: {
+  point: Pillar;
+  diff: number;
+  isMobile: boolean;
+}) => {
   const getPoint = useMemo(() => {
     switch (point.position) {
-      case 'left': return reusableLeft;
-      case 'right': return reusableRight;
-      default: return new THREE.Vector3();
+      case 'left':
+        return reusableLeft;
+      case 'right':
+        return reusableRight;
+      default:
+        return new THREE.Vector3();
     }
   }, [point.position]);
 
   const textAlign = point.position === 'left' ? 'right' : 'left';
 
-  const textProps: Partial<TextProps> = useMemo(() => ({
-    font: withBasePath("./Vercetti-Regular.woff"),
-    color: "white",
-    anchorX: textAlign,
-    fillOpacity: 2 - 2 * diff,
-  }), [textAlign, diff]);
+  const textProps: Partial<TextProps> = useMemo(
+    () => ({
+      font: withBasePath('./Vercetti-Regular.woff'),
+      color: 'white',
+      anchorX: textAlign,
+      fillOpacity: 2 - 2 * diff,
+    }),
+    [textAlign, diff],
+  );
 
-  const titleProps = useMemo(() => ({
-    ...textProps,
-    font: withBasePath("./soria-font.ttf"),
-    fontSize: 0.6,
-    maxWidth: 3,
-  }), [textProps]);
+  const titleProps = useMemo(
+    () => ({
+      ...textProps,
+      font: withBasePath('./soria-font.ttf'),
+      fontSize: 0.6,
+      maxWidth: 3,
+    }),
+    [textProps],
+  );
 
   return (
     <group position={point.point} scale={isMobile ? 0.35 : 0.6}>
@@ -69,10 +86,23 @@ const Timeline = ({ progress }: { progress: number }) => {
   const isActive = usePortalStore((state) => state.activePortalId === 'services');
   const timeline = useMemo(() => PILLAR_TIMELINE, []);
 
-  const curve = useMemo(() => new THREE.CatmullRomCurve3(timeline.map(p => p.point), false), [timeline]);
+  const curve = useMemo(
+    () =>
+      new THREE.CatmullRomCurve3(
+        timeline.map((p) => p.point),
+        false,
+      ),
+    [timeline],
+  );
   const curvePoints = useMemo(() => curve.getPoints(500), [curve]);
-  const visibleCurvePoints = useMemo(() => curvePoints.slice(0, Math.max(1, Math.ceil(progress * curvePoints.length))), [curvePoints, progress]);
-  const visibleTimelinePoints = useMemo(() => timeline.slice(0, Math.max(1, Math.round(progress * (timeline.length - 1) + 1))), [timeline, progress]);
+  const visibleCurvePoints = useMemo(
+    () => curvePoints.slice(0, Math.max(1, Math.ceil(progress * curvePoints.length))),
+    [curvePoints, progress],
+  );
+  const visibleTimelinePoints = useMemo(
+    () => timeline.slice(0, Math.max(1, Math.round(progress * (timeline.length - 1) + 1))),
+    [timeline, progress],
+  );
 
   const [visibleDashedCurvePoints, setVisibleDashedCurvePoints] = useState<THREE.Vector3[]>([]);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -81,7 +111,12 @@ const Timeline = ({ progress }: { progress: number }) => {
   useFrame((_, delta) => {
     if (isActive) {
       const position = curve.getPoint(progress);
-      camera.position.x = THREE.MathUtils.damp(camera.position.x, (isMobile ? -1 : -2) + position.x, 4, delta);
+      camera.position.x = THREE.MathUtils.damp(
+        camera.position.x,
+        (isMobile ? -1 : -2) + position.x,
+        4,
+        delta,
+      );
       camera.position.y = THREE.MathUtils.damp(camera.position.y, -39 + position.z, 4, delta);
       camera.position.z = THREE.MathUtils.damp(camera.position.z, 13 - position.y, 4, delta);
     }
@@ -101,11 +136,15 @@ const Timeline = ({ progress }: { progress: number }) => {
         duration: 1,
         delay: isActive ? 0.4 : 0,
       });
-      tl.to(group.position, {
-        y: isActive ? 0 : -2,
-        duration: 1,
-        delay: isActive ? 0.4 : 0,
-      }, 0);
+      tl.to(
+        group.position,
+        {
+          y: isActive ? 0 : -2,
+          duration: 1,
+          delay: isActive ? 0.4 : 0,
+        },
+        0,
+      );
     }
 
     if (timeoutRef.current) {
@@ -122,7 +161,9 @@ const Timeline = ({ progress }: { progress: number }) => {
       timeoutRef.current = setTimeout(() => {
         intervalRef.current = setInterval(() => {
           const p = i++ / 100;
-          setVisibleDashedCurvePoints(curvePoints.slice(0, Math.max(1, Math.ceil(p * curvePoints.length))));
+          setVisibleDashedCurvePoints(
+            curvePoints.slice(0, Math.max(1, Math.ceil(p * curvePoints.length))),
+          );
           if (i > 100) {
             if (intervalRef.current) clearInterval(intervalRef.current);
             intervalRef.current = null;
@@ -178,19 +219,20 @@ const Timeline = ({ progress }: { progress: number }) => {
       )}
       <group ref={groupRef}>
         {visibleTimelinePoints.map((point, i) => {
-          const diff = Math.min(2 * Math.max(i - (progress * (timeline.length - 1)), 0), 1);
+          const diff = Math.min(2 * Math.max(i - progress * (timeline.length - 1), 0), 1);
           return <TimelinePoint point={point} key={i} diff={diff} isMobile={isMobile} />;
         })}
       </group>
       <group ref={journeyRef} position={[0, -3.4, 0]}>
         <Text
-          font={withBasePath("./Vercetti-Regular.woff")}
+          font={withBasePath('./Vercetti-Regular.woff')}
           fontSize={0.22}
           color="#9fd9ea"
           anchorX="center"
           anchorY="middle"
           fillOpacity={journeyOpacity}
-          letterSpacing={0.15}>
+          letterSpacing={0.15}
+        >
           {JOURNEY_STEPS.join('  →  ')}
         </Text>
       </group>

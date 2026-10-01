@@ -14,20 +14,20 @@ import { useGLTF, useScroll } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
-import { GLTF } from 'three-stdlib'
+import { GLTF } from 'three-stdlib';
 
 import { withBasePath } from '@constants';
 
 type GLTFResult = GLTF & {
   nodes: {
-    ['#WIN0003_Frame_#WIN0003_Textures_0']: THREE.Mesh
-    ['#WIN0003_Window_#WIN0003_Textures_0']: THREE.Mesh
-    ['#WIN0003_Handle_#WIN0003_Textures_0']: THREE.Mesh
-  }
+    ['#WIN0003_Frame_#WIN0003_Textures_0']: THREE.Mesh;
+    ['#WIN0003_Window_#WIN0003_Textures_0']: THREE.Mesh;
+    ['#WIN0003_Handle_#WIN0003_Textures_0']: THREE.Mesh;
+  };
   materials: {
-    WIN0003_Textures: THREE.MeshPhysicalMaterial
-  }
-}
+    WIN0003_Textures: THREE.MeshPhysicalMaterial;
+  };
+};
 
 const MODEL_PATH = withBasePath('models/window.glb');
 
@@ -35,7 +35,7 @@ const WindowModel = (props: Partial<THREE.Object3D>) => {
   const handleRef = useRef<THREE.Mesh>(null);
   const windowRef = useRef<THREE.Mesh>(null);
 
-  const { nodes, materials } = useGLTF(MODEL_PATH, true) as GLTFResult
+  const { nodes, materials } = useGLTF(MODEL_PATH, true) as GLTFResult;
   const data = useScroll();
   useFrame(() => {
     const b = data.range(0.4, 0.1);
@@ -58,28 +58,27 @@ const WindowModel = (props: Partial<THREE.Object3D>) => {
           geometry={nodes['#WIN0003_Frame_#WIN0003_Textures_0'].geometry}
           material={materials.WIN0003_Textures}
         />
-        <group position={[0.441, -0.039, 0.082]}
-          ref={windowRef}>
+        <group position={[0.441, -0.039, 0.082]} ref={windowRef}>
           <mesh
             castShadow
             receiveShadow
             geometry={nodes['#WIN0003_Window_#WIN0003_Textures_0'].geometry}
-            material={materials.WIN0003_Textures} />
-          <mesh ref={handleRef}
+            material={materials.WIN0003_Textures}
+          />
+          <mesh
+            ref={handleRef}
             castShadow
             receiveShadow
             geometry={nodes['#WIN0003_Handle_#WIN0003_Textures_0'].geometry}
             material={materials.WIN0003_Textures}
-            position={[-0.84, -0.018, 0.55]} />
+            position={[-0.84, -0.018, 0.55]}
+          />
         </group>
       </group>
     </group>
-  )
-}
+  );
+};
 
 useGLTF.preload(MODEL_PATH);
 
 export default WindowModel;
-
-
-

@@ -22,8 +22,7 @@ export const SITE = {
   portfolioUrl: 'https://shauryap9006-cell.github.io/portfolio',
 
   /** Prefilled WhatsApp intro message a client sends when they tap "Start a project". */
-  whatsappIntroMessage:
-    "Hi thecollab! I found your website and I'd like to discuss a project.",
+  whatsappIntroMessage: "Hi thecollab! I found your website and I'd like to discuss a project.",
 } as const;
 
 export type SiteConfig = typeof SITE;
@@ -34,17 +33,14 @@ export const whatsappLink = (message: string = SITE.whatsappIntroMessage) =>
 
 /** WhatsApp deep link prefilled for a specific service enquiry. */
 export const whatsappServiceLink = (serviceName: string) =>
-  whatsappLink(
-    `Hi thecollab! I'm interested in your ${serviceName} service. Let's talk.`
-  );
+  whatsappLink(`Hi thecollab! I'm interested in your ${serviceName} service. Let's talk.`);
 
 /** mailto: link with a subject prefilled. */
 export const emailLink = (subject: string = `Project enquiry — ${SITE.name}`) =>
   `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}`;
 
 /** Instagram DM / profile deep link. */
-export const instagramLink = () =>
-  `https://www.instagram.com/${SITE.instagramHandle}/`;
+export const instagramLink = () => `https://www.instagram.com/${SITE.instagramHandle}/`;
 
 /** Build a base-path-aware public URL (GitHub Pages needs the /thecollab prefix). */
 export const withBasePath = (path: string) => {

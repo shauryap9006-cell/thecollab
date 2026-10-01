@@ -1,10 +1,10 @@
 'use client';
 
-import gsap from "gsap";
-import Image from "next/image";
-import { useEffect, useRef } from "react";
-import { withBasePath } from "@constants";
-import { usePortalStore, useScrollStore } from "@stores";
+import gsap from 'gsap';
+import Image from 'next/image';
+import { useEffect, useRef } from 'react';
+import { withBasePath } from '@constants';
+import { usePortalStore, useScrollStore } from '@stores';
 
 export const ScrollHint = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,11 +13,7 @@ export const ScrollHint = () => {
 
   const isServices = portal === 'services';
   const hintText = !portal || isServices ? 'SCROLL' : 'PAN';
-  const showScrollHint = !portal
-    ? scrollProgress === 0
-    : isServices
-    ? scrollProgress === 0
-    : true;
+  const showScrollHint = !portal ? scrollProgress === 0 : isServices ? scrollProgress === 0 : true;
 
   useEffect(() => {
     const el = containerRef.current;
@@ -41,11 +37,15 @@ export const ScrollHint = () => {
   }, [showScrollHint]);
 
   const svgSrc = withBasePath(
-    hintText === 'PAN' ? 'icons/chevrons-left-right.svg' : 'icons/chevrons-up-down.svg'
+    hintText === 'PAN' ? 'icons/chevrons-left-right.svg' : 'icons/chevrons-up-down.svg',
   );
 
   return (
-    <div ref={containerRef} className="fixed w-full bottom-5 pointer-events-none select-none" style={{ opacity: 0 }}>
+    <div
+      ref={containerRef}
+      className="fixed w-full bottom-5 pointer-events-none select-none"
+      style={{ opacity: 0 }}
+    >
       <div className="flex items-center justify-center gap-1.5 animate-pulse">
         <Image src={svgSrc} width={18} height={18} alt="" aria-hidden="true" loading="lazy" />
         <span className="text-white text-xs tracking-wider font-mono">{hintText}</span>
@@ -53,7 +53,3 @@ export const ScrollHint = () => {
     </div>
   );
 };
-
-
-
-

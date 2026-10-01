@@ -206,7 +206,8 @@ const RocketAsset = ({ hovered }: { hovered: boolean }) => {
   useFrame((state) => {
     if (groupRef.current) {
       groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 1.1) * 0.12;
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.9) * 0.08 + (hovered ? 0.12 : 0);
+      groupRef.current.position.y =
+        Math.sin(state.clock.elapsedTime * 1.9) * 0.08 + (hovered ? 0.12 : 0);
       groupRef.current.rotation.y += 0.008;
     }
   });
@@ -223,12 +224,20 @@ const RocketAsset = ({ hovered }: { hovered: boolean }) => {
       </mesh>
       <mesh position={[0, -0.75, 0]}>
         <coneGeometry args={[0.17, 0.3, 20]} />
-        <meshStandardMaterial color="#f97316" emissive="#f97316" emissiveIntensity={hovered ? 1 : 0.5} />
+        <meshStandardMaterial
+          color="#f97316"
+          emissive="#f97316"
+          emissiveIntensity={hovered ? 1 : 0.5}
+        />
       </mesh>
       {[0, 1, 2].map((i) => {
         const angle = (i / 3) * Math.PI * 2;
         return (
-          <mesh key={i} position={[Math.cos(angle) * 0.2, -0.4, Math.sin(angle) * 0.2]} rotation={[0, -angle, 0.2]}>
+          <mesh
+            key={i}
+            position={[Math.cos(angle) * 0.2, -0.4, Math.sin(angle) * 0.2]}
+            rotation={[0, -angle, 0.2]}
+          >
             <boxGeometry args={[0.05, 0.25, 0.18]} />
             <meshPhysicalMaterial color="#f87171" metalness={0.4} roughness={0.4} />
           </mesh>
@@ -254,7 +263,8 @@ const PaletteAsset = ({ hovered }: { hovered: boolean }) => {
     if (dotsRef.current) {
       dotsRef.current.children.forEach((dot, i) => {
         if (i < colors.length) {
-          const angle = state.clock.elapsedTime * (hovered ? 1.6 : 0.7) + (i / colors.length) * Math.PI * 2;
+          const angle =
+            state.clock.elapsedTime * (hovered ? 1.6 : 0.7) + (i / colors.length) * Math.PI * 2;
           dot.position.set(Math.cos(angle) * 0.5, Math.sin(angle) * 0.18, Math.sin(angle) * 0.5);
         }
       });
@@ -284,14 +294,22 @@ const PaletteAsset = ({ hovered }: { hovered: boolean }) => {
  */
 const ServiceAsset = ({ icon, hovered }: ServiceAssetProps) => {
   switch (icon) {
-    case 'globe': return <GlobeAsset hovered={hovered} />;
-    case 'phone': return <PhoneAsset hovered={hovered} />;
-    case 'reel': return <ReelAsset hovered={hovered} />;
-    case 'handshake': return <HandshakeAsset hovered={hovered} />;
-    case 'pin': return <PinAsset />;
-    case 'rocket': return <RocketAsset hovered={hovered} />;
-    case 'palette': return <PaletteAsset hovered={hovered} />;
-    default: return null;
+    case 'globe':
+      return <GlobeAsset hovered={hovered} />;
+    case 'phone':
+      return <PhoneAsset hovered={hovered} />;
+    case 'reel':
+      return <ReelAsset hovered={hovered} />;
+    case 'handshake':
+      return <HandshakeAsset hovered={hovered} />;
+    case 'pin':
+      return <PinAsset />;
+    case 'rocket':
+      return <RocketAsset hovered={hovered} />;
+    case 'palette':
+      return <PaletteAsset hovered={hovered} />;
+    default:
+      return null;
   }
 };
 

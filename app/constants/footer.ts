@@ -1,10 +1,5 @@
-import { FooterLink } from "../types";
-import {
-  SITE,
-  emailLink,
-  instagramLink,
-  whatsappLink,
-} from "./site";
+import { FooterLink } from '../types';
+import { SITE, emailLink, instagramLink, whatsappLink } from './site';
 
 export const FOOTER_LINKS: FooterLink[] = [
   {
@@ -27,8 +22,8 @@ export const FOOTER_LINKS: FooterLink[] = [
   },
   {
     name: 'Portfolio',
-    hoverText: "Meet the maker",
+    hoverText: 'Meet the maker',
     icon: 'icons/person.svg',
     url: SITE.portfolioUrl,
-  }
+  },
 ];

@@ -1,13 +1,13 @@
 'use client';
 
-import { Html, Svg, Text, useCursor, useScroll } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
-import { useIsMobile } from "@/app/hooks/useIsMobile";
-import * as THREE from "three";
-import { FOOTER_LINKS, withBasePath } from "../../constants";
-import { FooterLink } from "../../types";
+import { Html, Svg, Text, useCursor, useScroll } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import gsap from 'gsap';
+import { useEffect, useRef, useState } from 'react';
+import { useIsMobile } from '@/app/hooks/useIsMobile';
+import * as THREE from 'three';
+import { FOOTER_LINKS, withBasePath } from '../../constants';
+import { FooterLink } from '../../types';
 
 const FooterLinkItem = ({ link, isMobile }: { link: FooterLink; isMobile: boolean }) => {
   const textRef = useRef<THREE.Mesh>(null);
@@ -17,7 +17,7 @@ const FooterLinkItem = ({ link, isMobile }: { link: FooterLink; isMobile: boolea
   const onClick = () => window.open(link.url, '_blank');
 
   const fontProps = {
-    font: withBasePath("./Vercetti-Regular.woff"),
+    font: withBasePath('./Vercetti-Regular.woff'),
     fontSize: 0.2,
     color: 'white',
     onPointerOver,
@@ -42,12 +42,19 @@ const FooterLinkItem = ({ link, isMobile }: { link: FooterLink; isMobile: boolea
   useCursor(hovered);
 
   if (isMobile) {
-    return <Svg onClick={onClick} scale={0.0015} position={[0.1, 0.25, 0]} src={withBasePath(`/${link.icon}`)} />;
+    return (
+      <Svg
+        onClick={onClick}
+        scale={0.0015}
+        position={[0.1, 0.25, 0]}
+        src={withBasePath(`/${link.icon}`)}
+      />
+    );
   }
 
   return (
     <group>
-      <Text ref={textRef} {...fontProps} >
+      <Text ref={textRef} {...fontProps}>
         {link.name.toUpperCase()}
       </Text>
       {hovered && (
@@ -85,9 +92,7 @@ const Footer = () => {
 
   return (
     <group position={[0, -44, 18]} rotation={[-Math.PI / 2, 0, 0]} ref={groupRef}>
-      <group position={[isMobile ? -1.65 : -3, 0, 0]}>
-        {getLinks()}
-      </group>
+      <group position={[isMobile ? -1.65 : -3, 0, 0]}>{getLinks()}</group>
     </group>
   );
 };
