@@ -128,26 +128,26 @@ const ReelAsset = ({ hovered }: { hovered: boolean }) => {
  */
 const HandshakeAsset = ({ hovered }: { hovered: boolean }) => {
   const groupRef = useRef<THREE.Group>(null);
+  const leftRingRef = useRef<THREE.Mesh>(null);
+  const rightRingRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.012;
       groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.3) * 0.06;
       const spread = hovered ? 0.32 : 0.4;
-      const left = groupRef.current.children[0];
-      const right = groupRef.current.children[1];
-      if (left) left.position.x = -spread;
-      if (right) right.position.x = spread;
+      if (leftRingRef.current) leftRingRef.current.position.x = -spread;
+      if (rightRingRef.current) rightRingRef.current.position.x = spread;
     }
   });
 
   return (
     <group ref={groupRef} rotation={[0.4, 0, 0]}>
-      <mesh position={[-0.4, 0, 0]} rotation={[0, 0, hovered ? 0.5 : 0.35]}>
+      <mesh ref={leftRingRef} position={[-0.4, 0, 0]} rotation={[0, 0, hovered ? 0.5 : 0.35]}>
         <torusGeometry args={[0.22, 0.05, 12, 32]} />
         <meshPhysicalMaterial color="#22d3ee" metalness={0.5} roughness={0.25} clearcoat={0.8} />
       </mesh>
-      <mesh position={[0.4, 0, 0]} rotation={[0, 0, hovered ? -0.5 : -0.35]}>
+      <mesh ref={rightRingRef} position={[0.4, 0, 0]} rotation={[0, 0, hovered ? -0.5 : -0.35]}>
         <torusGeometry args={[0.22, 0.05, 12, 32]} />
         <meshPhysicalMaterial color="#a3e635" metalness={0.5} roughness={0.25} clearcoat={0.8} />
       </mesh>
@@ -223,8 +223,6 @@ const RocketAsset = ({ hovered }: { hovered: boolean }) => {
       </mesh>
       <mesh position={[0, -0.75, 0]}>
         <coneGeometry args={[0.17, 0.3, 20]} />
-        <mesh rotation={[Math.PI, 0, 0]}>
-        </mesh>
         <meshStandardMaterial color="#f97316" emissive="#f97316" emissiveIntensity={hovered ? 1 : 0.5} />
       </mesh>
       {[0, 1, 2].map((i) => {
@@ -245,13 +243,16 @@ const RocketAsset = ({ hovered }: { hovered: boolean }) => {
  */
 const PaletteAsset = ({ hovered }: { hovered: boolean }) => {
   const groupRef = useRef<THREE.Group>(null);
+  const dotsRef = useRef<THREE.Group>(null);
   const colors = ['#22d3ee', '#a3e635', '#f87171', '#fbbf24', '#c084fc'];
 
   useFrame((state) => {
     if (groupRef.current) {
       groupRef.current.rotation.y += hovered ? 0.035 : 0.014;
       groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.4) * 0.06;
-      groupRef.current.children.forEach((dot, i) => {
+    }
+    if (dotsRef.current) {
+      dotsRef.current.children.forEach((dot, i) => {
         if (i < colors.length) {
           const angle = state.clock.elapsedTime * (hovered ? 1.6 : 0.7) + (i / colors.length) * Math.PI * 2;
           dot.position.set(Math.cos(angle) * 0.5, Math.sin(angle) * 0.18, Math.sin(angle) * 0.5);
@@ -266,12 +267,14 @@ const PaletteAsset = ({ hovered }: { hovered: boolean }) => {
         <torusGeometry args={[0.5, 0.045, 12, 48]} />
         <meshPhysicalMaterial color="#e2e8f0" metalness={0.6} roughness={0.3} clearcoat={0.8} />
       </mesh>
-      {colors.map((color, i) => (
-        <mesh key={i}>
-          <sphereGeometry args={[0.07, 16, 16]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} />
-        </mesh>
-      ))}
+      <group ref={dotsRef}>
+        {colors.map((color, i) => (
+          <mesh key={i}>
+            <sphereGeometry args={[0.07, 16, 16]} />
+            <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} />
+          </mesh>
+        ))}
+      </group>
     </group>
   );
 };

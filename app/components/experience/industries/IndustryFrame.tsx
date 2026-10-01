@@ -53,13 +53,13 @@ const IndustryFrame = ({
   onClick
 }: IndustryFrameProps) => {
   const frameRef = useRef<THREE.Group>(null);
+  const textGroupRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
   const isHighlighted = hovered || forceHover;
 
   useEffect(() => {
     if (!frameRef.current) return;
-    const [, , textGroup] = frameRef.current.children;
 
     gsap.to(frameRef.current.scale, {
       x: isHighlighted ? 1.15 : 1,
@@ -69,10 +69,17 @@ const IndustryFrame = ({
       ease: "power2.out"
     });
 
-    gsap.to(textGroup.position, {
-      y: isHighlighted ? -1.8 : -1.5,
-      duration: 0.4,
-    });
+    if (textGroupRef.current) {
+      gsap.to(textGroupRef.current.position, {
+        y: isHighlighted ? -1.8 : -1.5,
+        duration: 0.4,
+      });
+    }
+
+    return () => {
+      if (frameRef.current) gsap.killTweensOf(frameRef.current.scale);
+      if (textGroupRef.current) gsap.killTweensOf(textGroupRef.current.position);
+    };
   }, [isHighlighted]);
 
   const glassMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
@@ -134,7 +141,7 @@ const IndustryFrame = ({
         </Text>
 
         {/* Text Info (Small, floating below) */}
-        <group position={[0, -1.5, 0.1]}>
+        <group ref={textGroupRef} position={[0, -1.5, 0.1]}>
           <Text
             font={withBasePath("./Vercetti-Regular.woff")}
             fontSize={0.16}
