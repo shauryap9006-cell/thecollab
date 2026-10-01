@@ -4,46 +4,23 @@ import { useGSAP } from "@gsap/react";
 import { AdaptiveDpr, Preload, ScrollControls, useProgress } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import gsap from "gsap";
-import { Suspense, useEffect, useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { Suspense, useRef } from "react";
 
 import { useThemeStore } from "@stores";
 
 import SideBadge from "./AwwardsBadge";
 import PortalCloseButton from "./PortalCloseButton";
-import Preloader from "./Preloader";
 import ProgressLoader from "./ProgressLoader";
 import { ScrollHint } from "./ScrollHint";
 import ThemeSwitcher from "./ThemeSwitcher";
 import ThemeTransition from "./ThemeTransition";
 import IndustryModal from "../experience/industries/IndustryModal";
-// import {Perf} from "r3f-perf"
 
 const CanvasLoader = (props: { children: React.ReactNode }) => {
-  const ref= useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundColor = useThemeStore((state) => state.theme.color);
   const { progress } = useProgress();
-  const [canvasStyle, setCanvasStyle] = useState<React.CSSProperties>({
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    opacity: 0,
-    overflow: "hidden",
-  });
-
-  useEffect(() => {
-    if (!isMobile) {
-      const borderStyle = {
-        inset: '1rem',
-        width: 'calc(100% - 2rem)',
-        height: 'calc(100% - 2rem)',
-      };
-      setCanvasStyle({ ...canvasStyle, ...borderStyle})
-    }
-  }, [isMobile]);
 
   useGSAP(() => {
     if (progress === 100) {
@@ -73,25 +50,24 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
   return (
     <div className="h-[100dvh] wrapper relative">
       <div className="h-[100dvh] relative" ref={ref}>
-        <Canvas className="base-canvas"
+        <Canvas
+          className="base-canvas absolute inset-0 md:inset-4 md:!w-[calc(100%-2rem)] md:!h-[calc(100%-2rem)] opacity-0 overflow-hidden"
           shadows
-          style={canvasStyle}
           ref={canvasRef}
-          dpr={[1, 2]}>
-          {/* <Perf/> */}
+          dpr={[1, 2]}
+        >
           <Suspense fallback={null}>
             <ambientLight intensity={0.5} />
 
             <ScrollControls pages={4} damping={0.4} maxSpeed={1} distance={1} style={{ zIndex: 1 }}>
               {props.children}
-              <Preloader />
             </ScrollControls>
             
             <ThemeTransition />
 
             <Preload all />
           </Suspense>
-          <AdaptiveDpr pixelated/>
+          <AdaptiveDpr pixelated />
         </Canvas>
         <ProgressLoader progress={progress} />
       </div>
@@ -105,6 +81,3 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
 };
 
 export default CanvasLoader;
-
-
-

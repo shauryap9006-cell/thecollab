@@ -9,8 +9,8 @@ import { withBasePath } from "@constants";
 interface IndustryFrameProps {
   title: string;
   date: string;
-  position: THREE.Vector3;
-  rotation?: THREE.Euler;
+  position: THREE.Vector3 | [number, number, number];
+  rotation?: THREE.Euler | [number, number, number];
   forceHover?: boolean;
   onClick?: () => void;
 }

@@ -7,6 +7,9 @@ import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
+const CLOUD_OFFSET = new THREE.Vector3(0, -2.5, -4);
+const tempOffset = new THREE.Vector3();
+
 const ThemeTransition = () => {
   const { theme } = useThemeStore();
   const { camera } = useThree();
@@ -16,10 +19,8 @@ const ThemeTransition = () => {
   // Keep the clouds group relative to the camera at all times
   useFrame(() => {
     if (cloudsRef.current) {
-      // Positioned low (y=-2.5) relative to the camera center
-      const offset = new THREE.Vector3(0, -2.5, -4);
-      offset.applyQuaternion(camera.quaternion);
-      cloudsRef.current.position.copy(camera.position).add(offset);
+      tempOffset.copy(CLOUD_OFFSET).applyQuaternion(camera.quaternion);
+      cloudsRef.current.position.copy(camera.position).add(tempOffset);
       cloudsRef.current.quaternion.copy(camera.quaternion);
     }
   });
@@ -65,7 +66,6 @@ const ThemeTransition = () => {
       <group position={[-25, 0, 0]}>
         <Clouds material={THREE.MeshBasicMaterial} renderOrder={999}>
           <meshBasicMaterial depthTest={false} transparent={false} opacity={1} />
-          <meshBasicMaterial transparent={false} opacity={1} />
           {/* Exact Mirror of Hero Cloud Parameters */}
           <Cloud seed={1} segments={1} concentrate="inside" bounds={[10, 10, 10]} growth={3}
             position={[-2, 2, 0]} color={cloudColor} volume={2} fade={5} />

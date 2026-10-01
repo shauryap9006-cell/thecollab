@@ -5,16 +5,15 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { usePortalStore } from "@stores";
 import gsap from "gsap";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
 import * as THREE from "three";
-
 import { JOURNEY_STEPS, PILLAR_TIMELINE, withBasePath } from "@constants";
 import { Pillar } from "@types";
+import { useIsMobile } from "@/app/hooks/useIsMobile";
 
 const reusableLeft = new THREE.Vector3(-0.3, 0, -0.1);
 const reusableRight = new THREE.Vector3(0.3, 0, -0.1);
 
-const TimelinePoint = ({ point, diff }: { point: Pillar, diff: number }) => {
+const TimelinePoint = ({ point, diff, isMobile }: { point: Pillar, diff: number, isMobile: boolean }) => {
   const getPoint = useMemo(() => {
     switch (point.position) {
       case 'left': return reusableLeft;
@@ -66,6 +65,7 @@ const TimelinePoint = ({ point, diff }: { point: Pillar, diff: number }) => {
 
 const Timeline = ({ progress }: { progress: number }) => {
   const { camera } = useThree();
+  const isMobile = useIsMobile();
   const isActive = usePortalStore((state) => state.activePortalId === 'services');
   const timeline = useMemo(() => PILLAR_TIMELINE, []);
 
@@ -177,7 +177,7 @@ const Timeline = ({ progress }: { progress: number }) => {
       <group ref={groupRef}>
         {visibleTimelinePoints.map((point, i) => {
           const diff = Math.min(2 * Math.max(i - (progress * (timeline.length - 1)), 0), 1);
-          return <TimelinePoint point={point} key={i} diff={diff} />;
+          return <TimelinePoint point={point} key={i} diff={diff} isMobile={isMobile} />;
         })}
       </group>
       <group ref={journeyRef} position={[0, -3.4, 0]}>

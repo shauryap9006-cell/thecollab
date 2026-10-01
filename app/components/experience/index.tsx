@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { usePortalStore, useThemeStore } from "@stores";
 import { withBasePath } from "@constants";
 import { useRef } from "react";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/app/hooks/useIsMobile";
 import * as THREE from 'three';
 import GridTile from "./GridTile";
 import Industries from "./industries";
@@ -14,6 +14,7 @@ import Services from "./services";
 
 const Experience = () => {
   const { theme } = useThemeStore();
+  const isMobile = useIsMobile();
   const titleRef = useRef<THREE.Group>(null);
   const groupRef = useRef<THREE.Group>(null);
   const data = useScroll();
@@ -77,21 +78,21 @@ const Experience = () => {
             id="services"
             color='#b9c6d6'
             textAlign='left'
-            position={new THREE.Vector3(isMobile ? -2.2 : -4.05, 0, isMobile ? 0.4 : 0)}>
+            position={[isMobile ? -2.2 : -4.05, 0, isMobile ? 0.4 : 0]}>
             <Services />
           </GridTile>
           <GridTile title='OFFERINGS'
             id="offerings"
             color='#bdd1e3'
             textAlign='center'
-            position={new THREE.Vector3(0, 0, 0)}>
+            position={[0, 0, 0]}>
             <Offerings />
           </GridTile>
           <GridTile title='WHO WE WORK WITH'
             id="industries"
             color={theme?.type === 'dark' ? '#0690d4' : '#111111'}
             textAlign='right'
-            position={new THREE.Vector3(isMobile ? 2.2 : 4.05, 0, isMobile ? 0.4 : 0)}>
+            position={[isMobile ? 2.2 : 4.05, 0, isMobile ? 0.4 : 0]}>
             <Industries />
           </GridTile>
         </group>

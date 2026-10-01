@@ -6,9 +6,9 @@ import { usePortalStore } from '@stores';
 import { withBasePath } from '@constants';
 import gsap from "gsap";
 import { useEffect, useRef, useState } from 'react';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/app/hooks/useIsMobile';
 import * as THREE from 'three';
-import { TriangleGeometry } from './Triangle';
+import { TriangleMesh } from './Triangle';
 
 interface GridTileProps {
   id: string;
@@ -16,7 +16,7 @@ interface GridTileProps {
   textAlign: TextProps['textAlign'];
   children: React.ReactNode;
   color: string;
-  position: THREE.Vector3;
+  position: THREE.Vector3 | [number, number, number];
 }
 
 // TODO: Rename this
@@ -27,6 +27,7 @@ const GridTile = (props: GridTileProps) => {
   const portalRef = useRef(null);
   const { title, textAlign, children, color, position, id } = props;
   const { camera } = useThree();
+  const isMobile = useIsMobile();
   const setActivePortal = usePortalStore((state) => state.setActivePortal);
   const isActive = usePortalStore((state) => state.activePortalId === id);
   const activePortalId = usePortalStore((state) => state.activePortalId);
@@ -153,7 +154,7 @@ const GridTile = (props: GridTileProps) => {
       [[-1, 2, 0], [-1, -2, 0], [3, -2, 0]] :
       [[-3, 2, 0], [1, -2, 0], [1, 2, 0]];
 
-    return <primitive object={TriangleGeometry({ points })} attach="geometry" />
+    return <TriangleMesh points={points} />;
   };
 
   return (

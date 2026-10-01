@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useMemo, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/app/hooks/useIsMobile";
 import ServiceTile from "./ServiceTile";
 
 import { SERVICES } from "@constants";
 import { usePortalStore } from "@stores";
 
 const OfferingsCarousel = () => {
+  const isMobile = useIsMobile();
   const [activeId, setActiveId] = useState<number | null>(null);
   const isActive = usePortalStore((state) => state.activePortalId === "offerings");
 

@@ -4,11 +4,11 @@ import { Edges, Text, TextProps, useCursor } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import gsap from "gsap";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/app/hooks/useIsMobile";
 import * as THREE from "three";
 
-import { usePortalStore, whatsappServiceLink } from "@stores";
-import { withBasePath } from "@constants";
+import { usePortalStore } from "@stores";
+import { withBasePath, whatsappServiceLink } from "@constants";
 import { Service } from "@types";
 import ServiceAsset from "./ServiceAsset";
 
@@ -24,6 +24,7 @@ interface ServiceTileProps {
 }
 
 const ServiceTile = ({ service, index, position, rotation, activeId, onClick }: ServiceTileProps) => {
+  const isMobile = useIsMobile();
   const tileRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const titleRef = useRef<TroikaText>(null);

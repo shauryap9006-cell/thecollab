@@ -6,6 +6,8 @@ import { useRef } from "react";
 import * as THREE from "three";
 import { withBasePath } from "@constants";
 
+const ROTATION_AXIS = new THREE.Vector3(0, -1, 0);
+
 const TextWindow = () => {
   const data = useScroll();
   const windowRef = useRef<THREE.Group>(null);
@@ -14,7 +16,7 @@ const TextWindow = () => {
     const c = data.range(0.65, 0.15);
 
     if (windowRef.current) {
-      windowRef.current.setRotationFromAxisAngle(new THREE.Vector3(0, -1, 0), 0.5 * Math.PI * c);
+      windowRef.current.setRotationFromAxisAngle(ROTATION_AXIS, 0.5 * Math.PI * c);
       windowRef.current.position.x = -0.6 * c;
       windowRef.current.position.z = -0.6 * c;
     }

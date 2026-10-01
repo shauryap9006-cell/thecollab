@@ -4,7 +4,7 @@ import { useScroll } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import { useEffect } from "react";
-import { isMobile } from "react-device-detect";
+import { useIsMobile } from "@/app/hooks/useIsMobile";
 import * as THREE from "three";
 import { usePortalStore } from "@stores";
 import { Wanderer } from "../../models/Wanderer";
@@ -13,6 +13,7 @@ import { TouchPanControls } from "../projects/TouchPanControls";
 
 const Offerings = () => {
   const { camera } = useThree();
+  const isMobile = useIsMobile();
   const isActive = usePortalStore((state) => state.activePortalId === "offerings");
   const data = useScroll();
 
@@ -26,7 +27,7 @@ const Offerings = () => {
         gsap.to(camera.position, { y: -39, x: 2, duration: 1 });
       }
     }
-  }, [isActive, camera, data.el]);
+  }, [isActive, isMobile, camera, data.el]);
 
   useFrame((state, delta) => {
     if (isActive) {
@@ -39,7 +40,7 @@ const Offerings = () => {
 
   return (
     <group>
-      <Wanderer rotation={new THREE.Euler(0, Math.PI / 6, 0)} scale={new THREE.Vector3(1.5, 1.5, 1.5)} position={new THREE.Vector3(0, -1, -1)}/>
+      <Wanderer rotation={[0, Math.PI / 6, 0]} scale={[1.5, 1.5, 1.5]} position={[0, -1, -1]}/>
       <OfferingsCarousel />
       { isActive && isMobile && <TouchPanControls /> }
     </group>

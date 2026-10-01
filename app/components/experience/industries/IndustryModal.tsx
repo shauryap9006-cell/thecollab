@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useIndustryStore, whatsappLink } from "@stores";
+import { useIndustryStore } from "@stores";
+import { whatsappLink } from "@constants";
 
 const IndustryModal = () => {
   const { selectedIndustry, setSelectedIndustry } = useIndustryStore();

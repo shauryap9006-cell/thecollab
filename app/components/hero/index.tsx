@@ -20,27 +20,17 @@ const Hero = () => {
   const { progress } = useProgress();
 
   useEffect(() => {
-    if (progress === 100 && titleRef.current) {
-      gsap.fromTo(titleRef.current.position, {
-        y: -10,
-        duration: 1,
-      }, {
-        y: 0,
-        duration: 3
-      });
-    }
-  }, [progress]);
-
-  useEffect(() => {
-    if (progress === 100 && ctaRef.current) {
-      gsap.fromTo(ctaRef.current.position, {
-        y: -4,
-      }, {
-        y: 0,
-        duration: 2,
-        delay: 1,
-        ease: 'power2.out',
-      });
+    if (progress === 100) {
+      const tl = gsap.timeline();
+      if (titleRef.current) {
+        tl.fromTo(titleRef.current.position, { y: -10 }, { y: 0, duration: 3, ease: 'power2.out' }, 0);
+      }
+      if (ctaRef.current) {
+        tl.fromTo(ctaRef.current.position, { y: -4 }, { y: 0, duration: 2, ease: 'power2.out' }, 1);
+      }
+      return () => {
+        tl.kill();
+      };
     }
   }, [progress]);
 
@@ -53,6 +43,9 @@ const Hero = () => {
         duration: 0.3,
       });
     }
+    return () => {
+      if (ctaRef.current) gsap.killTweensOf(ctaRef.current.scale);
+    };
   }, [ctaHovered]);
 
   useCursor(ctaHovered);

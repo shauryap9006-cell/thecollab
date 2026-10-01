@@ -1,19 +1,16 @@
 'use client';
 
-// import "react-crud-icons/dist/react-crud-icons.css";
-
 import { useGSAP } from "@gsap/react";
 import { usePortalStore, useThemeStore } from "@stores";
+import { withBasePath } from "@constants";
 import gsap from "gsap";
 import Image from 'next/image';
-import { useEffect, useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { useEffect, useRef } from "react";
 
 const ThemeSwitcher = () => {
   const themeSwitcherRef = useRef<HTMLDivElement>(null);
   const { nextTheme, theme } = useThemeStore();
   const isActive = usePortalStore((state) => state.activePortalId);
-  const [positionClass, setPositionClass] = useState<string>('');
   const toggleTheme = () => nextTheme();
 
   useGSAP(() => {
@@ -25,30 +22,36 @@ const ThemeSwitcher = () => {
   }, [isActive]);
 
   useEffect(() => {
-    setPositionClass(isMobile ? 'top-2 right-2' : 'top-6 right-6');
-  }, [isMobile]);
-
-  useEffect(() => {
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]')
-
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
       metaThemeColor.setAttribute('content', theme.color);
     }
   }, [theme.color]);
 
   return (
-    <div className={`fixed ${positionClass}`} ref={themeSwitcherRef} style={{ opacity: 0, zIndex: 2 }}>
+    <div
+      className="fixed top-2 right-2 md:top-6 md:right-6 z-[2]"
+      ref={themeSwitcherRef}
+      style={{ opacity: 0 }}
+    >
       <div className="flex items-center justify-center gap-2">
-        <a className="hover:cursor-pointer" onClick={toggleTheme}>
-          <Image src="icons/night-mode.svg" width={24} height={24} alt="night mode" loading="lazy" />
-        </a>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={`Switch theme (current: ${theme.type})`}
+          className="p-2 rounded-full hover:bg-white/10 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 cursor-pointer"
+        >
+          <Image
+            src={withBasePath("icons/night-mode.svg")}
+            width={24}
+            height={24}
+            alt="Toggle theme"
+            loading="lazy"
+          />
+        </button>
       </div>
     </div>
   );
 };
 
 export default ThemeSwitcher;
-
-
-
-

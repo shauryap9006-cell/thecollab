@@ -2,10 +2,10 @@
 
 import { useScrollStore } from '@/app/stores/scrollStore';
 import { useProgress } from '@react-three/drei';
-import { usePortalStore, useThemeStore, whatsappLink } from '@stores';
+import { usePortalStore, useThemeStore } from '@stores';
+import { whatsappLink } from '@constants';
 import gsap from 'gsap';
 import { useEffect, useRef, useState } from 'react';
-import { isMobile } from 'react-device-detect';
 
 /**
  * Vertical side badge — rotated brand mark that links to a WhatsApp chat.
@@ -38,22 +38,9 @@ const SideBadge = () => {
   useEffect(() => {
     if (isPortalActive) return;
     if (startAnimation && badgeRef.current) {
-      gsap.to(badgeRef.current, {
-        right: -scrollProgress * 1000,
-        duration: 0,
-        ease: 'power2.out',
-      });
+      badgeRef.current.style.right = `${-scrollProgress * 1000}px`;
     }
-
-    return () => {
-      gsap.killTweensOf(badgeRef.current);
-    }
-  }, [startAnimation, scrollProgress]);
-
-  useEffect(() => {
-    if (!badgeRef.current) return;
-    badgeRef.current.style.scale = isMobile ? '0.7' : '0.9';
-  }, [isMobile]);
+  }, [startAnimation, scrollProgress, isPortalActive]);
 
   useEffect(() => {
     if (fillRef.current) {
@@ -68,6 +55,7 @@ const SideBadge = () => {
     <div
       id="side-badge"
       ref={badgeRef}
+      className="scale-[0.7] md:scale-[0.9]"
       style={{
         position: 'fixed',
         zIndex: 999,

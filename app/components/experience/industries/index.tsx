@@ -3,71 +3,53 @@
 import { useScroll, Stars, Cloud, Clouds } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import { useEffect, useState, useRef } from "react";
-import { isMobile } from "react-device-detect";
+import { useEffect, useRef } from "react";
+import { useIsMobile } from "@/app/hooks/useIsMobile";
 import * as THREE from "three";
 import { usePortalStore, useThemeStore, useIndustryStore } from "@stores";
 import { INDUSTRIES } from "@constants";
 import IndustryFrame from "./IndustryFrame";
 import { TouchPanControls } from "../projects/TouchPanControls";
 
-interface MovingCloudProps {
-  seed: number;
-  y: number;
-  z: number;
-  speed: number;
-  initialX: number;
-  color: string;
-}
+const STATIC_CLOUDS = [
+  { seed: 42, position: [-45, 12, -35] as [number, number, number], volume: 8, opacity: 0.4, scale: 1.4 },
+  { seed: 105, position: [35, -8, -50] as [number, number, number], volume: 11, opacity: 0.35, scale: 1.8 },
+  { seed: 217, position: [-20, -15, -40] as [number, number, number], volume: 9, opacity: 0.5, scale: 1.2 },
+  { seed: 334, position: [15, 18, -60] as [number, number, number], volume: 12, opacity: 0.3, scale: 2.0 },
+  { seed: 489, position: [-60, -5, -70] as [number, number, number], volume: 14, opacity: 0.3, scale: 2.2 },
+  { seed: 562, position: [50, 10, -45] as [number, number, number], volume: 7, opacity: 0.45, scale: 1.3 },
+  { seed: 671, position: [-5, 5, -55] as [number, number, number], volume: 10, opacity: 0.4, scale: 1.6 },
+  { seed: 789, position: [25, -12, -65] as [number, number, number], volume: 13, opacity: 0.35, scale: 1.9 },
+];
 
-const MovingCloud = ({ seed: initialSeed, y: initialY, z: initialZ, speed: initialSpeed, initialX, color }: MovingCloudProps) => {
-  const ref = useRef<THREE.Group>(null);
-  const [cloudState, setCloudState] = useState({
-    seed: initialSeed,
-    y: initialY,
-    z: initialZ,
-    speed: initialSpeed,
-    opacity: 0.3 + Math.random() * 0.4,
-    volume: 6 + Math.random() * 6,
-    scale: 0.8 + Math.random() * 1.2,
-  });
-
-  const BOUNDS = 140; // Much wider bounds to prevent "popping"
-
-  useFrame((state, delta) => {
-    if (ref.current) {
-      // Drift right
-      ref.current.position.x += delta * cloudState.speed;
-
-      // Continuous Swapping: If it goes past the right edge, reset and re-randomize
-      if (ref.current.position.x > BOUNDS) {
-        ref.current.position.x = -BOUNDS;
-
-        // Randomize all properties to make it look like a totally new cloud
-        setCloudState({
-          seed: Math.random() * 1000,
-          y: (Math.random() - 0.5) * 40,
-          z: -20 - Math.random() * 80,
-          speed: 0.6 + Math.random() * 2.5,
-          opacity: 0.2 + Math.random() * 0.8,
-          volume: 5 + Math.random() * 10,
-          scale: 0.8 + Math.random() * 2.0,
-        });
+const CloudsLayer = ({ isNight }: { isNight: boolean }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  useFrame((_, delta) => {
+    if (groupRef.current) {
+      groupRef.current.position.x += delta * 0.5;
+      if (groupRef.current.position.x > 60) {
+        groupRef.current.position.x = -60;
       }
     }
   });
 
   return (
-    <group ref={ref} position={[initialX, cloudState.y, cloudState.z]} scale={cloudState.scale}>
-      <Cloud
-        seed={cloudState.seed}
-        segments={1}
-        color={color}
-        volume={cloudState.volume}
-        growth={4}
-        opacity={cloudState.opacity}
-        speed={0.2} // Internal noise speed
-      />
+    <group ref={groupRef}>
+      <Clouds material={THREE.MeshBasicMaterial}>
+        {STATIC_CLOUDS.map((cloud, i) => (
+          <group key={i} position={cloud.position} scale={cloud.scale}>
+            <Cloud
+              seed={cloud.seed}
+              segments={1}
+              color={isNight ? "#e0e0e0" : "#ffffff"}
+              volume={cloud.volume}
+              growth={4}
+              opacity={cloud.opacity}
+              speed={0.2}
+            />
+          </group>
+        ))}
+      </Clouds>
     </group>
   );
 };
@@ -98,7 +80,7 @@ const IndustryCarousel = ({ onSelect, activeId }: { onSelect: (industry: typeof 
             />
             <IndustryFrame
               {...industry}
-              position={new THREE.Vector3(0, 0, 0)}
+              position={[0, 0, 0]}
               forceHover={activeId === i}
               onClick={() => onSelect(industry)}
             />
@@ -111,6 +93,7 @@ const IndustryCarousel = ({ onSelect, activeId }: { onSelect: (industry: typeof 
 
 const Industries = () => {
   const { camera } = useThree();
+  const isMobile = useIsMobile();
   const isActive = usePortalStore((state) => state.activePortalId === "industries");
   const { theme } = useThemeStore();
   const data = useScroll();
@@ -155,28 +138,8 @@ const Industries = () => {
         <color attach="background" args={[skyColor]} />
         <fog attach="fog" args={[skyColor, 15, 80]} />
 
-        {/* 60 Large, Majestic background clouds moving in a continuous 'River' flow */}
-        <Clouds material={THREE.MeshBasicMaterial}>
-          {[...Array(60)].map((_, i) => {
-            const seed = Math.random() * 1000;
-            const zDepth = -20 - Math.random() * 80;
-            const yPos = (Math.random() - 0.5) * 50;
-            const speed = 0.6 + Math.random() * 1.5;
-            const xOffset = (Math.random() - 0.5) * 200;
-
-            return (
-              <MovingCloud
-                key={i}
-                seed={seed}
-                y={yPos}
-                z={zDepth}
-                speed={speed}
-                initialX={xOffset}
-                color={isNight ? "#e0e0e0" : "#ffffff"}
-              />
-            );
-          })}
-        </Clouds>
+        {/* Curated majestic background clouds moving in a continuous flow */}
+        <CloudsLayer isNight={isNight} />
 
         {isNight && <Stars radius={200} depth={100} count={5000} factor={10} saturation={10} fade={true} speed={1} />}
 
