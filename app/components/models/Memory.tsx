@@ -15,6 +15,8 @@ import React, { JSX } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 
+import { withBasePath } from '@constants'
+
 type GLTFResult = GLTF & {
   nodes: {
     ['Extract2_04_-_Default_0']: THREE.Mesh
@@ -38,8 +40,10 @@ type GLTFResult = GLTF & {
   }
 }
 
+const MODEL_PATH = withBasePath('models/dalithe_persistence_of_memory.glb')
+
 export function Memory(props: JSX.IntrinsicElements['group']) {
-  const { nodes, materials } = useGLTF('models/dalithe_persistence_of_memory.glb') as GLTFResult
+  const { nodes, materials } = useGLTF(MODEL_PATH) as GLTFResult
   return (
     <group {...props} dispose={null}>
       <mesh castShadow receiveShadow geometry={nodes['Extract2_04_-_Default_0'].geometry} material={materials['04_-_Default']} scale={0.021} />
@@ -54,7 +58,7 @@ export function Memory(props: JSX.IntrinsicElements['group']) {
   )
 }
 
-useGLTF.preload('models/dalithe_persistence_of_memory.glb')
+useGLTF.preload(MODEL_PATH)
 
 
 

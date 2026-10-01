@@ -3,6 +3,7 @@
 import { Text, useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { usePortalStore, useThemeStore } from "@stores";
+import { withBasePath } from "@constants";
 import { useRef } from "react";
 import { isMobile } from "react-device-detect";
 import * as THREE from 'three';
@@ -19,7 +20,7 @@ const Experience = () => {
   const isActive = usePortalStore((state) => !!state.activePortalId);
 
   const fontProps = {
-    font: "./soria-font.ttf",
+    font: withBasePath("./soria-font.ttf"),
     fontSize: 0.4,
     color: 'white',
   };

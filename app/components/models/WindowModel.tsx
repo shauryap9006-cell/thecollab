@@ -16,6 +16,8 @@ import { useRef } from 'react';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib'
 
+import { withBasePath } from '@constants';
+
 type GLTFResult = GLTF & {
   nodes: {
     ['#WIN0003_Frame_#WIN0003_Textures_0']: THREE.Mesh
@@ -26,11 +28,14 @@ type GLTFResult = GLTF & {
     WIN0003_Textures: THREE.MeshPhysicalMaterial
   }
 }
+
+const MODEL_PATH = withBasePath('models/window.glb');
+
 const WindowModel = (props: Partial<THREE.Object3D>) => {
   const handleRef = useRef<THREE.Mesh>(null);
   const windowRef = useRef<THREE.Mesh>(null);
 
-  const { nodes, materials } = useGLTF('models/window.glb', true) as GLTFResult
+  const { nodes, materials } = useGLTF(MODEL_PATH, true) as GLTFResult
   const data = useScroll();
   useFrame(() => {
     const b = data.range(0.4, 0.1);
@@ -72,7 +77,7 @@ const WindowModel = (props: Partial<THREE.Object3D>) => {
   )
 }
 
-useGLTF.preload('models/window.glb');
+useGLTF.preload(MODEL_PATH);
 
 export default WindowModel;
 

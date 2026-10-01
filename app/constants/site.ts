@@ -48,10 +48,7 @@ export const instagramLink = () =>
 
 /** Build a base-path-aware public URL (GitHub Pages needs the /thecollab prefix). */
 export const withBasePath = (path: string) => {
-  const base =
-    process.env.NODE_ENV === 'production' ? '/thecollab' : '';
-  if (path.startsWith('/') && base) {
-    return `${base}${path}`;
-  }
-  return path;
+  const base = process.env.NODE_ENV === 'production' ? '/thecollab' : '';
+  const cleanPath = path.startsWith('/') ? path : `/${path.replace(/^\.\//, '')}`;
+  return base ? `${base}${cleanPath}` : cleanPath;
 };

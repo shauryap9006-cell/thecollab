@@ -76,6 +76,7 @@ const Timeline = ({ progress }: { progress: number }) => {
 
   const [visibleDashedCurvePoints, setVisibleDashedCurvePoints] = useState<THREE.Vector3[]>([]);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useFrame((_, delta) => {
     if (isActive) {
@@ -106,23 +107,41 @@ const Timeline = ({ progress }: { progress: number }) => {
       }, 0);
     }
 
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     if (isActive) {
       let i = 0;
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         intervalRef.current = setInterval(() => {
           const p = i++ / 100;
           setVisibleDashedCurvePoints(curvePoints.slice(0, Math.max(1, Math.ceil(p * curvePoints.length))));
-          if (i > 100 && intervalRef.current) clearInterval(intervalRef.current);
+          if (i > 100) {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
         }, 10);
       }, 1000);
     } else {
       setVisibleDashedCurvePoints([]);
-      if (intervalRef.current) clearInterval(intervalRef.current);
     }
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (groupRef.current) gsap.killTweensOf(groupRef.current);
     };
   }, [isActive, curvePoints]);
 
@@ -136,6 +155,10 @@ const Timeline = ({ progress }: { progress: number }) => {
         duration: 0.5,
       });
     }
+
+    return () => {
+      if (journeyRef.current) gsap.killTweensOf(journeyRef.current.position);
+    };
   }, []);
 
   return (

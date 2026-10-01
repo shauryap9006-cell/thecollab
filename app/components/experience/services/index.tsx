@@ -1,49 +1,59 @@
 'use client';
 
-import { ScrollControls } from "@react-three/drei";
+import { ScrollControls, useScroll } from "@react-three/drei";
 import { usePortalStore, useScrollStore } from "@stores";
 import { useEffect } from "react";
 import * as THREE from "three";
 import { Memory } from "../../models/Memory";
 import Timeline from "./Timeline";
 
+const ServicesContent = ({ isActive }: { isActive: boolean }) => {
+  const data = useScroll();
+  const setScrollProgress = useScrollStore((state) => state.setScrollProgress);
+  const scrollProgress = useScrollStore((state) => state.scrollProgress);
+
+  useEffect(() => {
+    const el = data?.el;
+    if (!el) return;
+
+    if (isActive) {
+      el.style.zIndex = '20';
+      el.style.pointerEvents = 'auto';
+
+      const handleScroll = () => {
+        const scrollTop = el.scrollTop;
+        const scrollHeight = el.scrollHeight - el.clientHeight;
+        const progress = scrollHeight > 0 ? Math.min(Math.max(scrollTop / scrollHeight, 0), 1) : 0;
+        setScrollProgress(progress);
+      };
+
+      setScrollProgress(0);
+      el.addEventListener('scroll', handleScroll, { passive: true });
+
+      return () => {
+        el.removeEventListener('scroll', handleScroll);
+        el.scrollTo({ top: 0 });
+        el.style.zIndex = '-1';
+        el.style.pointerEvents = 'none';
+        setScrollProgress(0);
+      };
+    } else {
+      el.style.zIndex = '-1';
+      el.style.pointerEvents = 'none';
+      el.scrollTo({ top: 0 });
+    }
+  }, [isActive, data?.el, setScrollProgress]);
+
+  return (
+    <>
+      <Memory scale={new THREE.Vector3(5, 5, 5)} position={new THREE.Vector3(0, -6, 1)}/>
+      <Timeline progress={isActive ? scrollProgress : 0} />
+    </>
+  );
+};
+
 const Services = () => {
   const isActive = usePortalStore((state) => state.activePortalId === 'services');
-  const { scrollProgress, setScrollProgress } = useScrollStore();
-
-  const handleScroll = (event: Event) => {
-    const target = event.target as HTMLElement;
-    const scrollTop = target.scrollTop;
-    const scrollHeight = target.scrollHeight - target.clientHeight;
-    const progress = Math.min(Math.max(scrollTop / scrollHeight, 0), 1);
-    setScrollProgress(progress);
-  }
-
-  // Hack: If the portal is active, add the scroll event listener to the scroll
-  // wrapper div. If the portal is not active, remove the scroll event listener.
-  // ScrollControls doesn't work out of the box, so we have to manually handle
-  // the scroll event.
-  useEffect(() => {
-    if (isActive) {
-      const scrollWrapper = document.querySelector('div[style*="z-index: -1"]') as HTMLElement;
-      const originalScrollWrapper = document.querySelector('div[style*="z-index: 1"]') as HTMLElement;
-      setScrollProgress(0);
-      scrollWrapper.addEventListener('scroll', handleScroll)
-      scrollWrapper.style.zIndex = '1';
-      originalScrollWrapper.style.zIndex = '-1';
-    } else {
-      const scrollWrapper = document.querySelector('div[style*="z-index: 1"]') as HTMLElement;
-      const originalScrollWrapper = document.querySelector('div[style*="z-index: -1"]') as HTMLElement;
-
-      if (scrollWrapper) {
-        scrollWrapper.scrollTo({ top: 0, behavior: 'smooth' });
-        setScrollProgress(0);
-        scrollWrapper.removeEventListener('scroll', handleScroll);
-        scrollWrapper.style.zIndex = '-1';
-        originalScrollWrapper.style.zIndex = '1';
-      }
-    }
-  }, [isActive]);
 
   return (
     <group>
@@ -52,11 +62,11 @@ const Services = () => {
         <shadowMaterial opacity={0.1} />
       </mesh>
       <ScrollControls style={{ zIndex: -1}} pages={2} maxSpeed={0.4}>
-        <Memory scale={new THREE.Vector3(5, 5, 5)} position={new THREE.Vector3(0, -6, 1)}/>
-        <Timeline progress={isActive ? scrollProgress : 0} />
+        <ServicesContent isActive={isActive} />
       </ScrollControls>
     </group>
   );
 };
 
 export default Services;
+
