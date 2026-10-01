@@ -10,7 +10,6 @@ import * as THREE from 'three';
 import GridTile from './GridTile';
 import Industries from './industries';
 import Offerings from './offerings';
-import Services from './services';
 
 const Experience = () => {
   const { theme } = useThemeStore();
@@ -87,22 +86,13 @@ const Experience = () => {
           {getTitle()}
         </group>
 
-        <group position={[0, -1, 0]} ref={groupRef} scale={0.9}>
-          <GridTile
-            title="SERVICES"
-            id="services"
-            color="#b9c6d6"
-            textAlign="left"
-            position={[isMobile ? -2.2 : -4.05, 0, isMobile ? 0.4 : 0]}
-          >
-            <Services />
-          </GridTile>
+        <group position={[0, -1, 0]} ref={groupRef} scale={isMobile ? 0.7 : 0.9}>
           <GridTile
             title="OFFERINGS"
             id="offerings"
             color="#bdd1e3"
             textAlign="center"
-            position={[0, 0, 0]}
+            position={[isMobile ? -1.5 : -2.3, 0, 0]}
           >
             <Offerings />
           </GridTile>
@@ -110,8 +100,8 @@ const Experience = () => {
             title="WHO WE WORK WITH"
             id="industries"
             color={theme?.type === 'dark' ? '#0690d4' : '#111111'}
-            textAlign="right"
-            position={[isMobile ? 2.2 : 4.05, 0, isMobile ? 0.4 : 0]}
+            textAlign="center"
+            position={[isMobile ? 1.5 : 2.3, 0, 0]}
           >
             <Industries />
           </GridTile>

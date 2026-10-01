@@ -15,7 +15,6 @@ import gsap from 'gsap';
 import { useEffect, useRef, useState } from 'react';
 import { useIsMobile } from '@/app/hooks/useIsMobile';
 import * as THREE from 'three';
-import { TriangleMesh } from './Triangle';
 
 interface GridTileProps {
   id: string;
@@ -41,22 +40,21 @@ const GridTile = (props: GridTileProps) => {
   const data = useScroll();
 
   useEffect(() => {
-    // Hanlde the hover box and title animation for mobile.
+    // Handle the hover box and title animation for mobile.
     if (isMobile && titleRef.current) {
-      const isServices = id === 'services';
       gsap.to(titleRef.current, {
-        fontSize: 0.13,
-        maxWidth: 4,
-        color: isServices ? '#FFF' : '#888',
-        letterSpacing: 0.4,
+        fontSize: 0.32,
+        maxWidth: 3.5,
+        color: '#FFF',
+        letterSpacing: 0.1,
       });
       gsap.to(titleRef.current.position, {
-        x: isServices ? 1 : -1,
-        y: isServices ? -1.7 : 1.5,
+        x: 0,
+        y: -1.6,
         duration: 0.5,
       });
     }
-  }, [id, isMobile]);
+  }, [isMobile]);
 
   useFrame((state) => {
     const d = data.range(0.95, 0.05);
@@ -152,24 +150,7 @@ const GridTile = (props: GridTileProps) => {
   };
 
   const getGeometry = () => {
-    if (!isMobile) {
-      return <planeGeometry args={[4, 4, 1]} />;
-    }
-
-    const isServices = id === 'services';
-    const points = isServices
-      ? [
-          [-1, 2, 0],
-          [-1, -2, 0],
-          [3, -2, 0],
-        ]
-      : [
-          [-3, 2, 0],
-          [1, -2, 0],
-          [1, 2, 0],
-        ];
-
-    return <TriangleMesh points={points} />;
+    return <planeGeometry args={[4, 4, 1]} />;
   };
 
   return (
