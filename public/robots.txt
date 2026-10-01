@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /_next/static/chunks/app/
+Allow: /
+
+Sitemap: https://shauryap9006-cell.github.io/thecollab/sitemap.xml
