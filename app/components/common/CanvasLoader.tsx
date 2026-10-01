@@ -10,6 +10,7 @@ import { isMobile } from "react-device-detect";
 import { useThemeStore } from "@stores";
 
 import SideBadge from "./AwwardsBadge";
+import PortalCloseButton from "./PortalCloseButton";
 import Preloader from "./Preloader";
 import ProgressLoader from "./ProgressLoader";
 import { ScrollHint } from "./ScrollHint";
@@ -94,6 +95,7 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
         </Canvas>
         <ProgressLoader progress={progress} />
       </div>
+      <PortalCloseButton />
       <SideBadge />
       <ThemeSwitcher />
       <ScrollHint />

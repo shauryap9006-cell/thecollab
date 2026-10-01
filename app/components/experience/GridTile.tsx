@@ -1,10 +1,11 @@
 'use client';
 
-import { Edges, MeshPortalMaterial, Text, TextProps, useScroll } from '@react-three/drei';
+import { Edges, MeshPortalMaterial, Text, TextProps, useCursor, useScroll } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { usePortalStore } from '@stores';
+import { withBasePath } from '@constants';
 import gsap from "gsap";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { TriangleGeometry } from './Triangle';
@@ -70,79 +71,44 @@ const GridTile = (props: GridTileProps) => {
     }
   });
 
-  const handleEscape = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      exitPortal(true);
-    }
-  };
+  const wasActiveRef = useRef(false);
+  const [hovered, setHovered] = useState(false);
 
-  const portalInto = (e: React.MouseEvent) => {
+  useCursor(!isActive && !isMobile && hovered);
+
+  useEffect(() => {
+    if (isActive) {
+      wasActiveRef.current = true;
+      gsap.to(portalRef.current, {
+        blend: 1,
+        duration: 0.5,
+      });
+    } else if (wasActiveRef.current) {
+      wasActiveRef.current = false;
+      gsap.to(camera.position, {
+        x: 0,
+        duration: 1,
+      });
+      gsap.to(camera.rotation, {
+        x: -Math.PI / 2,
+        y: 0,
+        duration: 1,
+      });
+      gsap.to(portalRef.current, {
+        blend: 0,
+        duration: 1,
+      });
+    }
+  }, [isActive, camera]);
+
+  const portalInto = (e: React.MouseEvent | any) => {
     if (isActive || activePortalId) return;
     e.stopPropagation();
     setActivePortal(id);
-    document.body.style.cursor = 'auto';
-    const div = document.createElement('div');
-
-    div.className = 'fixed close';
-    div.style.transform = 'rotateX(90deg)';
-    div.onclick = () => exitPortal(true);
-
-    if (!document.querySelector('.close')) {
-      document.body.appendChild(div);
-
-      gsap.fromTo(div, {
-        scale: 0,
-        rotate: '-180deg',
-      }, {
-        opacity: 1,
-        zIndex: 10,
-        transform: 'rotateX(0deg)',
-        scale: 1,
-        duration: 1,
-      })
-    }
-    document.body.addEventListener('keydown', handleEscape);
-    gsap.to(portalRef.current, {
-      blend: 1,
-      duration: 0.5,
-    });
   };
 
-  const exitPortal = (force = false) => {
-    if (!force && !activePortalId) return;
-    setActivePortal(null)
-
-    gsap.to(camera.position, {
-      x: 0,
-      duration: 1,
-    });
-
-    gsap.to(camera.rotation, {
-      x: -Math.PI / 2,
-      y: 0,
-      duration: 1,
-    });
-
-    gsap.to(portalRef.current, {
-      blend: 0,
-      duration: 1,
-    });
-
-    // Remove the div from the dom
-    gsap.to(document.querySelector('.close'), {
-      scale: 0,
-      duration: 0.5,
-      onComplete: () => {
-        document.querySelectorAll('.close').forEach((el) => {
-          el.remove();
-        });
-      }
-    })
-    document.body.removeEventListener('keydown', handleEscape);
-  }
-
   const fontProps: Partial<TextProps> = {
-    font: "./soria-font.ttf",
+    font: withBasePath("./soria-font.ttf"),
     maxWidth: 2,
     anchorX: 'center',
     anchorY: 'bottom',
@@ -154,7 +120,7 @@ const GridTile = (props: GridTileProps) => {
 
   const onPointerOver = () => {
     if (isActive || isMobile) return;
-    document.body.style.cursor = 'pointer';
+    setHovered(true);
     gsap.to(titleRef.current, {
       fillOpacity: 1
     });
@@ -166,7 +132,7 @@ const GridTile = (props: GridTileProps) => {
 
   const onPointerOut = () => {
     if (isMobile) return;
-    document.body.style.cursor = 'auto';
+    setHovered(false);
     gsap.to(titleRef.current, {
       fillOpacity: 0
     });
