@@ -198,9 +198,9 @@ const Industries = () => {
     }
   });
 
-  // Inverse Sky Theme
-  const isNight = theme.type === 'light';
-  const skyColor = isNight ? '#0a0a0a' : '#0690d4'; // Darker night for more depth
+  // Sky Theme matches active theme
+  const isNight = theme.type === 'dark';
+  const skyColor = isNight ? '#060a12' : '#0690d4';
 
   return (
     <>

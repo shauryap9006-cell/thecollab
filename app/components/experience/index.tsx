@@ -110,7 +110,7 @@ const Experience = () => {
           <GridTile
             title="WHO WE WORK WITH"
             id="industries"
-            color={theme?.type === 'dark' ? '#0690d4' : '#111111'}
+            color={theme?.type === 'dark' ? '#060a12' : '#0690d4'}
             textAlign="center"
             position={isMobile ? [0, -2.3, 0] : [2.3, 0, 0]}
           >

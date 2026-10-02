@@ -3,7 +3,6 @@
 import { Html, Text, useCursor, useScroll } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import gsap from 'gsap';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useIsMobile } from '@/app/hooks/useIsMobile';
 import * as THREE from 'three';
@@ -43,26 +42,7 @@ const FooterLinkItem = ({ link, isMobile }: { link: FooterLink; isMobile: boolea
   useCursor(hovered);
 
   if (isMobile) {
-    return (
-      <Html center position={[0.1, 0.25, 0]}>
-        <a
-          href={link.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={link.name}
-          className="flex items-center justify-center p-2 opacity-80 hover:opacity-100 transition-opacity"
-        >
-          <Image
-            src={withBasePath(`/${link.icon}`)}
-            alt={link.name}
-            width={20}
-            height={20}
-            className="w-5 h-5 invert pointer-events-auto"
-            unoptimized
-          />
-        </a>
-      </Html>
-    );
+    return null;
   }
 
   return (

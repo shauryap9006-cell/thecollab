@@ -28,6 +28,7 @@ interface GridTileProps {
 // TODO: Rename this
 const GridTile = (props: GridTileProps) => {
   const titleRef = useRef<THREE.Group>(null);
+  const badgeRef = useRef<THREE.Mesh>(null);
   const gridRef = useRef<THREE.Group>(null);
   const hoverBoxRef = useRef<THREE.Mesh>(null);
   const portalRef = useRef(null);
@@ -43,24 +44,24 @@ const GridTile = (props: GridTileProps) => {
     // Handle the hover box and title animation for mobile.
     if (isMobile && titleRef.current) {
       gsap.to(titleRef.current, {
-        fontSize: 0.32,
-        maxWidth: 3.5,
-        color: '#FFF',
-        letterSpacing: 0.1,
-      });
-      gsap.to(titleRef.current.position, {
-        x: 0,
-        y: -1.6,
-        duration: 0.5,
+        fontSize: 0.28,
+        maxWidth: 3.2,
+        color: '#FFFFFF',
+        letterSpacing: 0.08,
       });
     }
   }, [isMobile]);
 
   useFrame((state) => {
-    const d = data.range(0.95, 0.05);
-    if (isMobile && titleRef.current) {
-      /* eslint-disable  @typescript-eslint/no-explicit-any */
-      (titleRef.current as any).fillOpacity = d;
+    const d = data.range(0.8, 0.2);
+    if (isMobile) {
+      if (titleRef.current) {
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
+        (titleRef.current as any).fillOpacity = Math.min(1, d * 1.5);
+      }
+      if (badgeRef.current) {
+        (badgeRef.current.material as THREE.Material).opacity = Math.min(0.85, d * 1.2);
+      }
     }
 
     // Dynamic Tilt Parallax (Desktop Only)
@@ -115,13 +116,14 @@ const GridTile = (props: GridTileProps) => {
 
   const fontProps: Partial<TextProps> = {
     font: withBasePath('./soria-font.ttf'),
-    maxWidth: 2,
+    maxWidth: 3.4,
     anchorX: 'center',
-    anchorY: 'bottom',
-    fontSize: 0.7,
-    color: 'white',
+    anchorY: 'middle',
+    fontSize: isMobile ? 0.28 : 0.38,
+    color: '#ffffff',
     textAlign: textAlign,
-    fillOpacity: 0,
+    fillOpacity: isMobile ? 1 : 0,
+    letterSpacing: 0.1,
   };
 
   const onPointerOver = () => {
@@ -130,6 +132,9 @@ const GridTile = (props: GridTileProps) => {
     gsap.to(titleRef.current, {
       fillOpacity: 1,
     });
+    if (badgeRef.current) {
+      gsap.to(badgeRef.current.material, { opacity: 0.85, duration: 0.3 });
+    }
     if (gridRef.current && hoverBoxRef.current) {
       gsap.to(gridRef.current.position, { z: 0.3, duration: 0.4 });
       gsap.to(hoverBoxRef.current.scale, { x: 1, y: 1, z: 1, duration: 0.4 });
@@ -142,6 +147,9 @@ const GridTile = (props: GridTileProps) => {
     gsap.to(titleRef.current, {
       fillOpacity: 0,
     });
+    if (badgeRef.current) {
+      gsap.to(badgeRef.current.material, { opacity: 0, duration: 0.3 });
+    }
     if (gridRef.current && hoverBoxRef.current) {
       gsap.to(gridRef.current.position, { z: 0, duration: 0.4 });
       gsap.to(hoverBoxRef.current.scale, { x: 0, y: 0, z: 0, duration: 0.4 });
@@ -168,9 +176,20 @@ const GridTile = (props: GridTileProps) => {
           <meshPhysicalMaterial color="#444" transparent={true} opacity={0.3} />
           <Edges color="white" lineWidth={3} />
         </mesh>
-        <Text position={[0, -1.8, 0.4]} {...fontProps} ref={titleRef}>
-          {title}
-        </Text>
+        <group position={[0, isMobile ? -1.55 : -1.8, 0.4]}>
+          <mesh position={[0, 0, -0.02]} ref={badgeRef}>
+            <planeGeometry args={[isMobile ? 3.3 : 3.6, isMobile ? 0.52 : 0.58]} />
+            <meshBasicMaterial
+              color="#050505"
+              transparent={true}
+              opacity={isMobile ? 0.85 : 0}
+            />
+            <Edges color="white" lineWidth={1} />
+          </mesh>
+          <Text position={[0, 0, 0.02]} {...fontProps} ref={titleRef}>
+            {title}
+          </Text>
+        </group>
       </group>
       <MeshPortalMaterial ref={portalRef} blend={0} resolution={0} blur={0}>
         <color attach="background" args={[color]} />

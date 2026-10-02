@@ -16,6 +16,7 @@ import { ScrollHint } from './ScrollHint';
 import ThemeSwitcher from './ThemeSwitcher';
 import ThemeTransition from './ThemeTransition';
 import IndustryModal from '../experience/industries/IndustryModal';
+import MobileFooter from './MobileFooter';
 
 const CanvasLoader = (props: { children: React.ReactNode }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -78,6 +79,7 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
       <ThemeSwitcher />
       <ScrollHint />
       <IndustryModal />
+      <MobileFooter />
 
       {/* Accessible & SEO-crawlable semantic links */}
       <footer className="sr-only" aria-label="Social and contact links">
