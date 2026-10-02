@@ -20,10 +20,4 @@ export const FOOTER_LINKS: FooterLink[] = [
     icon: 'icons/mail.svg',
     url: emailLink(),
   },
-  {
-    name: 'Portfolio',
-    hoverText: 'Meet the maker',
-    icon: 'icons/person.svg',
-    url: SITE.portfolioUrl,
-  },
 ];

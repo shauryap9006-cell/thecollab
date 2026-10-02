@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { emailLink, instagramLink, SITE, whatsappLink } from '@constants';
+import { emailLink, instagramLink, whatsappLink } from '@constants';
 import { usePortalStore, useScrollStore } from '@stores';
 
 const SOCIAL_LINKS = [
@@ -60,25 +60,6 @@ const SOCIAL_LINKS = [
       >
         <rect x="2" y="4" width="20" height="16" rx="2" />
         <path d="m22 7-10 5L2 7" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Portfolio',
-    url: SITE.portfolioUrl,
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="8" r="4" />
-        <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
       </svg>
     ),
   },
