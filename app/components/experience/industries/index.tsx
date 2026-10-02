@@ -110,25 +110,25 @@ const IndustryCarousel = ({
   activeId: number | null;
 }) => {
   return (
-    <group position={[0, 0, -5]}>
+    <group position={[0, 0, -4]}>
       {/* Floating Industries in a gentle curve/arc for better depth */}
       {INDUSTRIES.map((industry, i) => {
         const total = INDUSTRIES.length;
-        const radius = 12; // Radius of the arc
-        const angleStep = Math.PI / 6; // Spread angle
-        const angle = (i - (total - 1) / 2) * (angleStep / (total / 4));
+        const radius = 18; // Radius of the arc
+        const angleStep = 0.28; // Spread angle
+        const angle = (i - (total - 1) / 2) * angleStep;
 
         const x = Math.sin(angle) * radius;
         const z = Math.cos(angle) * radius - radius; // Offset so center is at 0
-        const y = 0.8;
+        const y = 0.6;
 
         return (
           <group key={i} position={[x, y, z]} rotation={[0, -angle, 0]}>
             <spotLight
               position={[0, 4, 3]}
-              angle={0.6}
+              angle={0.65}
               penumbra={1}
-              intensity={40}
+              intensity={45}
               target-position={[0, 0, 0]}
             />
             <IndustryFrame
@@ -158,9 +158,9 @@ const Industries = () => {
     if (data.el) data.el.style.overflow = isActive ? 'hidden' : 'auto';
     if (isActive) {
       if (typeof window !== 'undefined' && window.innerWidth < 768) {
-        gsap.to(camera.position, { z: 11.5, y: -39, x: 5, duration: 1 });
+        gsap.to(camera.position, { z: 12.5, y: -39, x: 0, duration: 1 });
       } else {
-        gsap.to(camera.position, { y: -39, x: 6.5, duration: 1 });
+        gsap.to(camera.position, { z: 12.5, y: -39, x: 0, duration: 1 });
       }
     }
   }, [isActive, camera, data.el]);

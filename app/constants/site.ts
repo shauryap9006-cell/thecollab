@@ -12,12 +12,12 @@ export const SITE = {
   shortDescription:
     'A digital growth agency building stronger online presences through websites, social media, and creator-led marketing.',
 
-  /** ⚠️ PLACEHOLDER — replace with the real WhatsApp number in international format, digits only. */
-  whatsappNumber: '910000000000',
-  /** ⚠️ PLACEHOLDER — replace with the real email address. */
-  email: 'hello@thecollab.in',
-  /** ⚠️ PLACEHOLDER — replace with the real Instagram handle (no @). */
-  instagramHandle: 'thecollab',
+  /** WhatsApp number in international format, digits only. */
+  whatsappNumber: '917310062393',
+  /** Primary contact email address. */
+  email: 'thecollab870@gmail.com',
+  /** Official Instagram handle (no @). */
+  instagramHandle: 'the.collab_08',
   /** ⚠️ PLACEHOLDER — replace with the real portfolio URL once known. */
   portfolioUrl: 'https://shauryap9006-cell.github.io/portfolio',
 

@@ -3,4 +3,7 @@ export interface Industry {
   date: string;
   image: string;
   description: string;
+  video?: string;
+  liveUrl?: string;
+  tag?: string;
 }

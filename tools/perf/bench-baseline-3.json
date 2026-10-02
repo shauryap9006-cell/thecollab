@@ -1,0 +1,12 @@
+{
+  "frames": 21,
+  "avgMs": 622.99,
+  "p50": 400,
+  "p95": 1233.4,
+  "p99": 1766.6,
+  "maxMs": 1766.6,
+  "framesOver25ms": 21,
+  "framesOver50ms": 21,
+  "longAnimationFrames": 1,
+  "label": "baseline-3"
+}

@@ -1,0 +1,12 @@
+{
+  "frames": 9,
+  "avgMs": 1401.8,
+  "p50": 850,
+  "p95": 3949.9,
+  "p99": 3949.9,
+  "maxMs": 3949.9,
+  "framesOver25ms": 9,
+  "framesOver50ms": 9,
+  "longAnimationFrames": 0,
+  "label": "run"
+}
