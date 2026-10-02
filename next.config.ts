@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === 'production';
+const isVercel = Boolean(process.env.VERCEL);
+// Vercel deploys to root domain (''). GitHub Pages needs '/thecollab'.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? (isVercel ? '' : (process.env.GITHUB_ACTIONS ? '/thecollab' : ''));
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   eslint: {
     ignoreDuringBuilds: false,
   },
@@ -13,10 +18,8 @@ const nextConfig: NextConfig = {
   output: 'export',
   // Ship browser source maps so the deployed bundles are debuggable (A4).
   productionBrowserSourceMaps: true,
-  // Only apply basePath and assetPrefix in production (GitHub Pages).
-  // NOTE: must match the GitHub Pages repo name — change here if the repo differs.
-  basePath: isProd ? '/thecollab' : '',
-  assetPrefix: isProd ? '/thecollab' : '',
+  basePath: basePath || undefined,
+  assetPrefix: basePath || undefined,
   images: {
     unoptimized: true,
   },

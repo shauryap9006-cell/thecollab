@@ -42,9 +42,11 @@ export const emailLink = (subject: string = `Project enquiry — ${SITE.name}`) 
 /** Instagram DM / profile deep link. */
 export const instagramLink = () => `https://www.instagram.com/${SITE.instagramHandle}/`;
 
-/** Build a base-path-aware public URL (GitHub Pages needs the /thecollab prefix). */
+/** Build a base-path-aware public URL (respects NEXT_PUBLIC_BASE_PATH or root for Vercel). */
 export const withBasePath = (path: string) => {
-  const base = process.env.NODE_ENV === 'production' ? '/thecollab' : '';
+  const base = process.env.NEXT_PUBLIC_BASE_PATH !== undefined
+    ? process.env.NEXT_PUBLIC_BASE_PATH
+    : (process.env.VERCEL ? '' : (process.env.NODE_ENV === 'production' && process.env.GITHUB_ACTIONS ? '/thecollab' : ''));
   const cleanPath = path.startsWith('/') ? path : `/${path.replace(/^\.\//, '')}`;
   return base ? `${base}${cleanPath}` : cleanPath;
 };

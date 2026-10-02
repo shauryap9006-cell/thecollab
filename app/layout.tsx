@@ -16,8 +16,12 @@ const vercettiFont = localFont({
   fallback: ['sans-serif'],
 });
 
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : (process.env.NEXT_PUBLIC_BASE_PATH ? 'https://shauryap9006-cell.github.io/thecollab' : 'https://thecollab.vercel.app');
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://shauryap9006-cell.github.io'),
+  metadataBase: new URL(siteUrl),
   title: 'thecollab — Your Website. Your Brand. Your Reach.',
   description:
     'thecollab is a digital growth agency helping businesses build a stronger online presence through high-quality websites, social media content, and creator-led marketing campaigns.',
@@ -45,7 +49,7 @@ export const metadata: Metadata = {
     title: 'thecollab — Your Website. Your Brand. Your Reach.',
     description:
       'A digital growth agency: websites, social media, and creator-led marketing campaigns.',
-    url: 'https://shauryap9006-cell.github.io/thecollab',
+    url: siteUrl,
     siteName: 'thecollab',
     locale: 'en_US',
     type: 'website',
@@ -57,7 +61,7 @@ export const metadata: Metadata = {
       'A digital growth agency: websites, social media, and creator-led marketing campaigns.',
   },
   icons: {
-    icon: `${process.env.NEXT_PUBLIC_BASE_PATH || '/thecollab'}/favicon.svg`,
+    icon: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/favicon.svg`.replace(/^\/\//, '/'),
   },
 };
 
