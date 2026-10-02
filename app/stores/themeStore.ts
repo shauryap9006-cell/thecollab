@@ -8,12 +8,12 @@ interface Theme {
 
 const AvailableThemes: Theme[] = [
   {
-    type: 'light',
-    color: '#0690d4',
-  },
-  {
     type: 'dark',
     color: '#111',
+  },
+  {
+    type: 'light',
+    color: '#0690d4',
   },
 ];
 
@@ -36,7 +36,7 @@ export const useThemeStore = create<ThemeStore>()(
       },
     }),
     {
-      name: 'theme-storage',
+      name: 'theme-storage-v2',
       partialize: (state) => ({ theme: state.theme }),
     },
   ),
