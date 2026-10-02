@@ -29,11 +29,12 @@ const Experience = () => {
   useFrame((state, delta) => {
     if (groupRef.current && !isActive) {
       const d = data.range(0.8, 0.2);
-      groupRef.current.position.y = d > 0 ? -1.8 : -30; // Pushed back from -1 to -1.8
+      const defaultY = isMobile ? -0.35 : -1.8;
+      groupRef.current.position.y = d > 0 ? defaultY : -30;
       groupRef.current.visible = d > 0;
 
       // Enhanced Parallax Sway
-      const targetX = -state.pointer.x * (isMobile ? 0.1 : 0.4); // Reversed
+      const targetX = -state.pointer.x * (isMobile ? 0.05 : 0.4); // Reversed
       const targetZ = -state.pointer.y * (isMobile ? 0.05 : 0.2); // Reversed
       groupRef.current.position.x = THREE.MathUtils.lerp(
         groupRef.current.position.x,
@@ -92,13 +93,17 @@ const Experience = () => {
           {getTitle()}
         </group>
 
-        <group position={[0, -1, 0]} ref={groupRef} scale={isMobile ? 0.7 : 0.9}>
+        <group
+          position={[0, isMobile ? -0.35 : -1, 0]}
+          ref={groupRef}
+          scale={isMobile ? 0.46 : 0.9}
+        >
           <GridTile
             title="OFFERINGS"
             id="offerings"
             color="#bdd1e3"
             textAlign="center"
-            position={[isMobile ? -1.5 : -2.3, 0, 0]}
+            position={isMobile ? [0, 2.3, 0] : [-2.3, 0, 0]}
           >
             <Offerings />
           </GridTile>
@@ -107,7 +112,7 @@ const Experience = () => {
             id="industries"
             color={theme?.type === 'dark' ? '#0690d4' : '#111111'}
             textAlign="center"
-            position={[isMobile ? 1.5 : 2.3, 0, 0]}
+            position={isMobile ? [0, -2.3, 0] : [2.3, 0, 0]}
           >
             <Industries />
           </GridTile>
