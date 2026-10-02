@@ -1,19 +1,21 @@
 'use client';
 
 import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 /**
- * Claude generated this. Very good code ngl.
+ * Touch-drag panning for the industries portal on small screens.
  *
- * @returns
+ * Listeners are registered once and the drag flag lives in a ref, so dragging
+ * never re-registers them, and the momentum check runs in the existing frame
+ * loop instead of a 100 ms interval.
  */
 export const TouchPanControls = () => {
   const { camera } = useThree();
   const touchStartRef = useRef({ x: 0, y: 0 });
   const cameraRotationRef = useRef({ x: 0, y: 0 });
   const targetRotationRef = useRef({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
+  const isDraggingRef = useRef(false);
 
   // Set initial camera and target rotation values
   useEffect(() => {
@@ -37,15 +39,21 @@ export const TouchPanControls = () => {
     camera.rotation.y += (targetRotationRef.current.x - camera.rotation.y) * dampingFactor;
     camera.rotation.x += (targetRotationRef.current.y - camera.rotation.x) * dampingFactor;
 
-    // Update camera matrix
-    camera.updateProjectionMatrix();
+    // Momentum settling: when movement nearly stops, update the reference point
+    // so the next drag starts from where the camera actually is.
+    if (!isDraggingRef.current && Math.abs(targetRotationRef.current.x - camera.rotation.y) < 0.001) {
+      cameraRotationRef.current = {
+        x: camera.rotation.y,
+        y: camera.rotation.x,
+      };
+    }
   });
 
   // Handle touch events
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 1) {
-        setIsDragging(true);
+        isDraggingRef.current = true;
         touchStartRef.current = {
           x: e.touches[0].clientX,
           y: e.touches[0].clientY,
@@ -59,7 +67,7 @@ export const TouchPanControls = () => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging || e.touches.length !== 1) return;
+      if (!isDraggingRef.current || e.touches.length !== 1) return;
 
       // Calculate touch movement delta
       const touchX = e.touches[0].clientX;
@@ -75,48 +83,23 @@ export const TouchPanControls = () => {
     };
 
     const handleTouchEnd = () => {
-      if (isDragging) {
-        setIsDragging(false);
-      }
+      isDraggingRef.current = false;
     };
 
-    // Momentum scrolling when finger is lifted
-    const handleTouchMomentum = () => {
-      if (!isDragging && Math.abs(targetRotationRef.current.x - camera.rotation.y) < 0.001) {
-        // When movement nearly stops, update the reference point
-        cameraRotationRef.current = {
-          x: camera.rotation.y,
-          y: camera.rotation.x,
-        };
-      }
-    };
-
-    // Add event listeners
-    document.addEventListener('touchstart', handleTouchStart, { passive: false });
-    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    // None of these handlers call preventDefault, so they are registered as
+    // passive listeners: the compositor can scroll the ScrollControls div
+    // without waiting for this JS to run.
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: true });
     document.addEventListener('touchend', handleTouchEnd);
-
-    // For momentum effect
-    const momentumInterval = setInterval(handleTouchMomentum, 100);
 
     // Clean up event listeners
     return () => {
       document.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleTouchEnd);
-      clearInterval(momentumInterval);
     };
-  }, [camera, isDragging]);
-
-  // Prevent default behavior to avoid browser gestures interfering
-  // useEffect(() => {
-  //   const preventDefault = (e) => e.preventDefault()
-  //   document.addEventListener('touchmove', preventDefault, { passive: false })
-
-  //   return () => {
-  //     document.removeEventListener('touchmove', preventDefault)
-  //   }
-  // }, [])
+  }, [camera]);
 
   return null;
 };
