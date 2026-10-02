@@ -16,6 +16,7 @@ const Experience = () => {
   const isMobile = useIsMobile();
   const titleRef = useRef<THREE.Group>(null);
   const groupRef = useRef<THREE.Group>(null);
+  const titleHiddenRef = useRef(false);
   const data = useScroll();
   const isActive = usePortalStore((state) => !!state.activePortalId);
 
@@ -51,15 +52,20 @@ const Experience = () => {
       ); // Reversed
     }
 
-    if (titleRef.current) {
-      const d = data.range(0.8, 0.2);
-      const e = data.range(0.7, 0.2);
+    const d = data.range(0.8, 0.2);
+    const e = data.range(0.7, 0.2);
+    // Below offset 0.7 the letters are fully transparent and settle into a fixed
+    // stacked pose, so once a frame has written that state there is nothing left
+    // to do until they fade back in. The guard keeps the loop from being what
+    // reveals them: the loop still runs on the frame that first reaches e > 0.
+    if (titleRef.current && (e > 0 || !titleHiddenRef.current)) {
       titleRef.current.children.forEach((text, i) => {
         const y = Math.max(Math.min((1 - d) * (10 - i), 10), 0.5);
         text.position.y = THREE.MathUtils.damp(text.position.y, y, 7, delta);
         /* eslint-disable  @typescript-eslint/no-explicit-any */
         (text as any).fillOpacity = e;
       });
+      titleHiddenRef.current = e === 0;
     }
   });
 
