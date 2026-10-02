@@ -39,7 +39,8 @@ const ThemeSwitcher = () => {
           type="button"
           onClick={toggleTheme}
           aria-label={`Switch theme (current: ${theme.type})`}
-          className="p-2 rounded-full hover:bg-white/10 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 cursor-pointer"
+          className="bg-transparent border-0 outline-none p-2 cursor-pointer hover:opacity-80 active:scale-95 transition-all"
+          style={{ background: 'transparent', border: 'none', outline: 'none' }}
         >
           <Image
             src={withBasePath('icons/night-mode.svg')}
