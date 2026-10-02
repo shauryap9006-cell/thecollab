@@ -129,7 +129,6 @@ const IndustryCarousel = ({
               angle={0.6}
               penumbra={1}
               intensity={40}
-              castShadow
               target-position={[0, 0, 0]}
             />
             <IndustryFrame
