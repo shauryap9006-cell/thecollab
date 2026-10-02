@@ -15,7 +15,6 @@ const SideBadge = () => {
   const badgeRef = useRef<HTMLDivElement>(null);
   const fillRef = useRef<SVGGElement>(null);
   const isPortalActive = usePortalStore((state) => !!state.activePortalId);
-  const scrollProgress = useScrollStore((state) => state.scrollProgress);
   const color = useThemeStore((state) => state.theme.color);
   const { progress } = useProgress();
 
@@ -38,11 +37,18 @@ const SideBadge = () => {
   }, [loaded]);
 
   useEffect(() => {
-    if (isPortalActive) return;
-    if (startAnimation && badgeRef.current) {
-      badgeRef.current.style.right = `${-scrollProgress * 1000}px`;
-    }
-  }, [startAnimation, scrollProgress, isPortalActive]);
+    // The scroll value is only ever written into `style.right`, so subscribe
+    // imperatively instead of re-rendering the whole badge (inline SVG included)
+    // on every 0.005 step ScrollWrapper publishes.
+    const writeRight = (scrollProgress: number) => {
+      if (isPortalActive) return;
+      if (startAnimation && badgeRef.current) {
+        badgeRef.current.style.right = `${-scrollProgress * 1000}px`;
+      }
+    };
+    writeRight(useScrollStore.getState().scrollProgress);
+    return useScrollStore.subscribe((state) => writeRight(state.scrollProgress));
+  }, [startAnimation, isPortalActive]);
 
   useEffect(() => {
     if (fillRef.current) {

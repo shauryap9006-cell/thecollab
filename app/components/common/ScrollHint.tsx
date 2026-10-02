@@ -9,11 +9,14 @@ import { usePortalStore, useScrollStore } from '@stores';
 export const ScrollHint = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const portal = usePortalStore((state) => state.activePortalId);
-  const scrollProgress = useScrollStore((state) => state.scrollProgress);
+  // Only the "still at the very top" boolean is used below, so select that instead
+  // of the raw progress: this component then re-renders when the boolean flips
+  // rather than on every 0.005 step ScrollWrapper publishes.
+  const atTop = useScrollStore((state) => state.scrollProgress === 0);
 
   const isServices = portal === 'services';
   const hintText = !portal || isServices ? 'SCROLL' : 'PAN';
-  const showScrollHint = !portal ? scrollProgress === 0 : isServices ? scrollProgress === 0 : true;
+  const showScrollHint = !portal || isServices ? atTop : true;
 
   useEffect(() => {
     const el = containerRef.current;
