@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   output: 'export',
+  // Ship browser source maps so the deployed bundles are debuggable (A4).
+  productionBrowserSourceMaps: true,
   // Only apply basePath and assetPrefix in production (GitHub Pages).
   // NOTE: must match the GitHub Pages repo name — change here if the repo differs.
   basePath: isProd ? '/thecollab' : '',
